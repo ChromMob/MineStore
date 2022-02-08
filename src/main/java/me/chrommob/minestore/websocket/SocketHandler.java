@@ -16,6 +16,7 @@ public class SocketHandler extends SimpleChannelInboundHandler<String> {
     protected void channelRead0(io.netty.channel.ChannelHandlerContext ctx, String msg) {
         final SocketObjects data = gson.fromJson(msg, SocketObjects.class);
         String commandWithoutPrefix = data.getCommand().replaceFirst("/", "");
+        commandWithoutPrefix = commandWithoutPrefix.replaceFirst("   ", " ");
         if (!data.getPassword().equalsIgnoreCase(Config.getPassword())) {
             Bukkit.getLogger().info("[MineStore] Wrong password!");
             return;

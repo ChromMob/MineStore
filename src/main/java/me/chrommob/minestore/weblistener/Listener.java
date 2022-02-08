@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import me.chrommob.minestore.commandsend.Command;
 import me.chrommob.minestore.data.Config;
-import me.chrommob.minestore.websocket.objects.WebListenerObjects;
+import me.chrommob.minestore.weblistener.objects.WebListenerObjects;
 import org.bukkit.Bukkit;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -37,6 +37,7 @@ public class Listener {
                 return;
             }
             String commandWithoutPrefix = data.getCommand().replaceFirst("/", "");
+            commandWithoutPrefix = commandWithoutPrefix.replaceFirst("   ", " ");
             if (Bukkit.getPlayer(data.getUsername()) == null && data.isPlayerOnlineNeeded()) {
                 Command.offline(data.getUsername(), commandWithoutPrefix);
             } else {
