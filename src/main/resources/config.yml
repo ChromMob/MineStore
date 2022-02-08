@@ -1,0 +1,55 @@
+#
+#    ███╗░░░███╗██╗███╗░░██╗███████╗░██████╗████████╗░█████╗░██████╗░███████╗
+#    ████╗░████║██║████╗░██║██╔════╝██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██╔════╝
+#    ██╔████╔██║██║██╔██╗██║█████╗░░╚█████╗░░░░██║░░░██║░░██║██████╔╝█████╗░░
+#    ██║╚██╔╝██║██║██║╚████║██╔══╝░░░╚═══██╗░░░██║░░░██║░░██║██╔══██╗██╔══╝░░
+#    ██║░╚═╝░██║██║██║░╚███║███████╗██████╔╝░░░██║░░░╚█████╔╝██║░░██║███████╗
+#    ╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚══════╝╚═════╝░░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚══════╝
+# -------------------------------------------------------------------------------#
+# Official MineStore Plugin by ChromMob                             -------#
+# Version: 1.0                                            ---------#
+#--------------------------------------------------------#
+# Modes: websocker or weblistener.                     #
+# Websocket requires opened port.                    #
+# Weblistener listens to your URL.                 #
+#------------------------------------------------#
+mode: websocket
+#------------------------------------------------#
+
+#------------------------------------------------#
+# Websocket port for plugin (port must be opened)
+port: 33266
+password: "hard_password_here"
+#------------------------------------------------#
+
+#------------------------------------------------#
+# Web listener mode enter your secret-key below
+secret-key: "hard_secret_key_here"
+#------------------------------------------------#
+
+#------------------------------------------------#
+# BUY-GUI                                        #
+# Do you want to enable buy gui?                 #
+gui-enabled: true
+format:
+  item-name: "%minestore_item_name%"
+  item-description: "%minestore_item_description%"
+  item-price: "&2Price: %minestore_item_price% &6%currency%"
+settings:
+  name: "&c&lBuy"
+  message: "You can buy items here! https://store.yourdomain.com/"
+  api-url: "https://store.yourdomain.com/api/gui/packages"
+#------------------------------------------------#
+
+#------------------------------------------------#
+# Link to your store                             #
+# /store message                                 #
+store-enabled: true
+store-message: "Visit our store: https://store.yourdomain.com/"
+#------------------------------------------------#
+
+#------------------------------------------------#
+# Link to your store's API                       #
+store-api: "https://yourstore.com/api/top_donators"
+api-key: "hard_api_key_here"
+#------------------------------------------------#
