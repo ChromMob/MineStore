@@ -2,7 +2,7 @@ package me.chrommob.minestore.websocket;
 
 import com.google.gson.Gson;
 import io.netty.channel.SimpleChannelInboundHandler;
-import me.chrommob.minestore.commandsend.Command;
+import me.chrommob.minestore.commandexecution.Command;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.websocket.objects.SocketObjects;
 import org.bukkit.Bukkit;
