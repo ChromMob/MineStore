@@ -6,11 +6,15 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.Getter;
 import me.chrommob.minestore.commands.Buy;
 import me.chrommob.minestore.commands.Reload;
 import me.chrommob.minestore.commands.Store;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.gui.Event;
+import me.chrommob.minestore.mysql.MySQLData;
+import me.chrommob.minestore.mysql.connection.ConnectionPool;
+import me.chrommob.minestore.mysql.data.UserManager;
 import me.chrommob.minestore.placeholders.PlaceholderHook;
 import me.chrommob.minestore.commands.PunishmentManager;
 import me.chrommob.minestore.commandexecution.JoinQuitListener;
@@ -22,7 +26,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+
 public final class MineStore extends JavaPlugin {
+    @Getter
+    UserManager userManager;
     public static MineStore instance;
     Mode mode = Mode.WEBSOCKET;
 
@@ -33,10 +40,10 @@ public final class MineStore extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         Metrics metrics = new Metrics(this, 14043);
         dependencyCheck();
         PluginManager plManager = Bukkit.getPluginManager();
-        instance = this;
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new Reload());
         plManager.registerEvents(new JoinQuitListener(), this);
@@ -49,6 +56,7 @@ public final class MineStore extends JavaPlugin {
         } else {
             mode = Mode.WEBLISTENER;
         }
+        MySQLData.setEnabled(getConfig().getBoolean("mysql.enabled"));
         Config.setStoreEnabled(getConfig().getBoolean("store-enabled"));
         Config.setPort(getConfig().getInt("port"));
         Config.setGuiEnabled(getConfig().getBoolean("gui-enabled"));
@@ -70,6 +78,11 @@ public final class MineStore extends JavaPlugin {
         if (Config.isStoreEnabled()) {
             manager.registerCommand(new Store());
         }
+        if (MySQLData.isEnabled() && Config.isVaultPresent()) {
+            new ConnectionPool(this);
+            ConnectionPool.createTable();
+            userManager = new UserManager();
+        }
     }
 
     @Override
@@ -84,6 +97,13 @@ public final class MineStore extends JavaPlugin {
         } else {
             Config.setPlaceholderPresent(true);
             new PlaceholderHook(this).register();
+        }
+        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            Bukkit.getLogger().info("[MineStore] Vault found!");
+            Config.setVaultPresent(false);
+        }
+        else {
+            Config.setVaultPresent(true);
         }
     }
 
@@ -105,6 +125,11 @@ public final class MineStore extends JavaPlugin {
 
     public void loadConfig() {
         reloadConfig();
+        MySQLData.setIp(getConfig().getString("mysql.ip"));
+        MySQLData.setPort(getConfig().getInt("mysql.port"));
+        MySQLData.setUser(getConfig().getString("mysql.username"));
+        MySQLData.setPassword(getConfig().getString("mysql.password"));
+        MySQLData.setDatabase(getConfig().getString("mysql.database"));
         Config.setPassword(getConfig().getString("password"));
         Config.setApiUrl(getConfig().getString("store-api"));
         Config.setStoreMessage(getConfig().getString("store-message"));

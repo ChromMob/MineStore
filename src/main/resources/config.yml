@@ -30,7 +30,7 @@ secret-key: "hard_secret_key_here"
 #------------------------------------------------#
 # BUY-GUI                                        #
 # Do you want to enable buy gui?                 #
-gui-enabled: true
+gui-enabled: false
 format:
   item-name: "%minestore_item_name%"
   item-description: "%minestore_item_description%"
@@ -44,12 +44,23 @@ settings:
 #------------------------------------------------#
 # Link to your store                             #
 # /store message                                 #
-store-enabled: true
+store-enabled: false
 store-message: "Visit our store: https://store.yourdomain.com/"
 #------------------------------------------------#
 
 #------------------------------------------------#
 # Link to your store's API                       #
-store-api: "https://yourstore.com/api/top_donators"
+store-api: "https://yourstore.com/api/"
 api-key: "hard_api_key_here"
+#------------------------------------------------#
+
+#------------------------------------------------#
+# MySQL settings                                 #
+mysql:
+  enabled: false
+  ip: "localhost"
+  port: 3306
+  username: "root"
+  password: ""
+  database: "minestore"
 #------------------------------------------------#

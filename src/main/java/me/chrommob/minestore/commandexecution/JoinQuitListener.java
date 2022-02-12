@@ -1,10 +1,16 @@
 package me.chrommob.minestore.commandexecution;
 
+import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.commands.PunishmentManager;
+import me.chrommob.minestore.data.Config;
+import me.chrommob.minestore.mysql.MySQLData;
+import me.chrommob.minestore.mysql.data.UserManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.util.UUID;
 
 import static me.chrommob.minestore.commandexecution.Command.runLater;
 
@@ -12,8 +18,8 @@ import static me.chrommob.minestore.commandexecution.Command.runLater;
 public class JoinQuitListener implements Listener {
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
-        String name = event.getPlayer().getName();
         try {
+            String name = event.getPlayer().getName();
             if (runLater.get(name).isEmpty()) {
                 runLater.remove(name);
             } else {
@@ -26,6 +32,18 @@ public class JoinQuitListener implements Listener {
             }
         } catch (Exception ignored) {
         }
+        if (Config.isVaultPresent() && MySQLData.isEnabled()) {
+            String name = event.getPlayer().getName();
+            UUID uuid = event.getPlayer().getUniqueId();
+            MineStore.instance.getUserManager().createProfile(uuid, name);
+        }
     }
-
+    @EventHandler
+    public void onPlayerQuit(final PlayerJoinEvent event) {
+        if (Config.isVaultPresent() && MySQLData.isEnabled()) {
+            String name = event.getPlayer().getName();
+            UUID uuid = event.getPlayer().getUniqueId();
+            MineStore.instance.getUserManager().removeProfile(uuid);
+        }
+    }
 }

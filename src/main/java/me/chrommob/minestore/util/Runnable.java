@@ -1,8 +1,11 @@
 package me.chrommob.minestore.util;
 
+import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.gui.BuyListener;
 import me.chrommob.minestore.gui.Currency;
+import me.chrommob.minestore.mysql.MySQLData;
+import me.chrommob.minestore.mysql.connection.ConnectionPool;
 import me.chrommob.minestore.placeholders.listener.DonationGoalListener;
 import me.chrommob.minestore.placeholders.listener.LastDonatorListener;
 import me.chrommob.minestore.placeholders.listener.TopDonoListener;
@@ -29,6 +32,10 @@ public class Runnable {
                 TopDonoListener.run();
                 DonationGoalListener.run();
                 LastDonatorListener.run();
+            }
+            if (Config.isVaultPresent() && MySQLData.isEnabled()) {
+                MineStore.instance.getUserManager().updateAll();
+                ConnectionPool.updateTable();
             }
         } , 0, 30, TimeUnit.SECONDS);
     }

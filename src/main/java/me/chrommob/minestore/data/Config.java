@@ -64,4 +64,9 @@ public class Config {
     @Setter
     @Getter
     private static boolean placeholderPresent;
+
+    @Setter
+    @Getter
+    private static boolean vaultPresent;
+
 }

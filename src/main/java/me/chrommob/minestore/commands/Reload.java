@@ -14,7 +14,7 @@ public class Reload extends BaseCommand {
     private void onReload(CommandSender sender) {
         try {
             MineStore.instance.loadConfig();
-            sender.sendMessage("§aConfig reloaded! Be aware reloading doesn't reload the mode, websocket port, gui toggle and store toggle.");
+            sender.sendMessage("§aConfig reloaded! Be aware reloading doesn't reload the mode, websocket port, gui toggle, mysql toggle and store toggle.");
         } catch (Exception e) {
             sender.sendMessage("§cAn error occurred while reloading the config.");
             e.printStackTrace();
