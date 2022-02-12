@@ -128,7 +128,6 @@ public class ConnectionPool {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
-            Bukkit.getLogger().info("[MineStore] Updated user: " + user.getName());
             conn = hikari.getConnection();
             String sql_qury = "INSERT INTO playerdata (uuid,username,prefix,suffix,balance,player_group) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE username=?,prefix=?,suffix=?,balance=?,player_group=?";
             ps = conn.prepareStatement(sql_qury);

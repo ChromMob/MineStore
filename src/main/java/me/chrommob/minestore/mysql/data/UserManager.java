@@ -2,6 +2,7 @@ package me.chrommob.minestore.mysql.data;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 
 import java.util.Map;
 import java.util.UUID;
@@ -35,8 +36,8 @@ public class UserManager {
 
     public void updateAll() {
         try {
-            for (User user : profiles.values()) {
-                user.update();
+            for (User profile : profiles.values()) {
+                profile.update();
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
 
@@ -39,11 +40,9 @@ public class JoinQuitListener implements Listener {
         }
     }
     @EventHandler
-    public void onPlayerQuit(final PlayerJoinEvent event) {
+    public void onPlayerQuit(final PlayerQuitEvent event) {
         if (Config.isVaultPresent() && MySQLData.isEnabled()) {
-            String name = event.getPlayer().getName();
-            UUID uuid = event.getPlayer().getUniqueId();
-            MineStore.instance.getUserManager().removeProfile(uuid);
+            MineStore.instance.getUserManager().removeProfile(event.getPlayer().getUniqueId());
         }
     }
 }
