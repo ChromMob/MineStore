@@ -11,16 +11,18 @@ public class SocketHandler extends SimpleChannelInboundHandler<String> {
 
     private final Gson gson = new Gson();
 
-
     @Override
     protected void channelRead0(io.netty.channel.ChannelHandlerContext ctx, String msg) {
         final SocketObjects data = gson.fromJson(msg, SocketObjects.class);
+        //Removing "/" from the command
         String commandWithoutPrefix = data.getCommand().replaceFirst("/", "");
         commandWithoutPrefix = commandWithoutPrefix.replaceFirst("   ", " ");
+        //Checking if the password is correct
         if (!data.getPassword().equalsIgnoreCase(Config.getPassword())) {
             Bukkit.getLogger().info("[MineStore] Wrong password!");
             return;
         }
+        //Executing the command
         if (Bukkit.getPlayer(data.getUsername()) == null && data.isPlayerOnlineNeeded()) {
             Command.offline(data.getUsername(), commandWithoutPrefix);
         } else {

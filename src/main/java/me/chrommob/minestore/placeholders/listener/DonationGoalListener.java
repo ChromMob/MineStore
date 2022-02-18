@@ -19,6 +19,7 @@ import java.util.List;
 public class DonationGoalListener {
     private static HttpsURLConnection urlConnection;
     @SneakyThrows
+    //Trying to get the donation goal from the server with the secret key
     public static void run() {
         if (Config.getApiKey() != 0) {
             try {
@@ -35,6 +36,7 @@ public class DonationGoalListener {
                 e.printStackTrace();
             }
         } else {
+            //If the api key is not set, we will try to get the donation goal from the server withouth the secret key
             try {
                 String link = Config.getApiUrl() + "donation_goal";
                 URL url = new URL(link);

@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.data.PlaceHolderData;
 import me.chrommob.minestore.placeholders.objects.LastDonator;
+import org.bukkit.Bukkit;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.InputStream;

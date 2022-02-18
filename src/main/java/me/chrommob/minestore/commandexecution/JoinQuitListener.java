@@ -27,7 +27,6 @@ public class JoinQuitListener implements Listener {
                 Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("MineStore"), () -> {
                     runLater.get(name).forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
                     runLater.remove(name);
-                    System.out.print(runLater);
                     PunishmentManager.update();
                 });
             }

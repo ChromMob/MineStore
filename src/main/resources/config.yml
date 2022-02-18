@@ -9,9 +9,9 @@
 # Official MineStore Plugin by ChromMob                             -------#
 # Version: 1.0                                            ---------#
 #--------------------------------------------------------#
-# Modes: websocker or weblistener.                     #
+# Modes: websocket or web-listener.                     #
 # Websocket requires opened port.                    #
-# Weblistener listens to your URL.                 #
+# Web-listener listens to your URL.                 #
 #------------------------------------------------#
 mode: websocket
 #------------------------------------------------#

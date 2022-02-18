@@ -1,14 +1,14 @@
 package me.chrommob.minestore.commands;
 
 import me.chrommob.minestore.MineStore;
+import me.chrommob.minestore.commandexecution.Command;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static me.chrommob.minestore.commandexecution.Command.runLater;
 
 public class PunishmentManager extends JavaPlugin {
     static File later = new File(MineStore.instance.getDataFolder()+"/later.yml");
@@ -23,8 +23,7 @@ public class PunishmentManager extends JavaPlugin {
     public static void update(){
         try {
             PrintWriter writer = new PrintWriter(later);
-            yaml.dump(runLater, writer);
-
+            yaml.dump(Command.runLater, writer);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -32,7 +31,17 @@ public class PunishmentManager extends JavaPlugin {
     public static void get(){
         try {
             InputStream inputStream = new FileInputStream(later);
-            runLater = (HashMap<String, ArrayList<String>>) yaml.load(inputStream);
+            try {
+                Command.runLater = (HashMap<String, ArrayList<String>>) yaml.load(inputStream);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            if (Command.runLater == null){
+                Command.runLater = new HashMap<>();
+                Bukkit.getLogger().info("[MineStore] Command file empty.");
+            } else {
+                Bukkit.getLogger().info("[MineStore] Loaded commands for " + Command.runLater.size() + " players.");
+            }
         } catch (Exception e){
             e.printStackTrace();
         }

@@ -69,4 +69,7 @@ public class Config {
     @Getter
     private static boolean vaultPresent;
 
+    @Setter
+    @Getter
+    private static boolean empty;
 }

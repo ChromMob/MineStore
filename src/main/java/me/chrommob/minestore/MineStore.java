@@ -7,6 +7,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
+import me.chrommob.minestore.commandexecution.Command;
 import me.chrommob.minestore.commands.Buy;
 import me.chrommob.minestore.commands.Reload;
 import me.chrommob.minestore.commands.Store;
@@ -140,6 +141,6 @@ public final class MineStore extends JavaPlugin {
         Config.setItemName(getConfig().getString("format.item-name"));
         Config.setItemDescription(getConfig().getString("format.item-description"));
         Config.setItemPrice(getConfig().getString("format.item-price"));
-        Config.setApiKey(getConfig().getInt("api-key"));
+        Config.setApiKey(Integer.parseInt(getConfig().getString("api-key")));
     }
 }

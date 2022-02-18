@@ -18,11 +18,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+//Runnable to execute plugin functions
 public class Runnable {
     private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     public static void runListener(String load) {
         executor.scheduleAtFixedRate(() -> {
-            if (load.equalsIgnoreCase("web")) {
+            if (load.equalsIgnoreCase("web") && Config.isEmpty()) {
                 Listener.run();
             }
             if (Config.isGuiEnabled()) {
@@ -39,5 +40,10 @@ public class Runnable {
                 ConnectionPool.updateTable();
             }
         } , 0, 30, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(() -> {
+            if (load.equalsIgnoreCase("web") && !Config.isEmpty()) {
+                Listener.run();
+            }
+        } , 0, 1, TimeUnit.SECONDS);
     }
 }

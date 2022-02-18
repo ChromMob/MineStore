@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Command {
-    public static HashMap<String, ArrayList<String>> runLater = new HashMap<>();
+    public static HashMap<String, ArrayList<String>> runLater;
 
     public static void online(String command) {
         Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("MineStore"), () -> {

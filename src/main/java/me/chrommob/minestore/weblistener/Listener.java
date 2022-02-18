@@ -18,9 +18,15 @@ public class Listener {
 
     @SneakyThrows
     public static void run() {
+        String link;
+        if (Config.getSecretKey().equalsIgnoreCase("") || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
+            link = Config.getApiUrl() + "servers/commands/queue";
+        } else {
+            link = Config.getApiUrl() + "servers/" + Config.getSecretKey() + "/commands/queue";
+        }
         WebListenerObjects data = new WebListenerObjects();
-        String link = "https://pro.minestorecms.com/api/servers/" + Config.getSecretKey() + "/commands/queue";
         URL url = new URL(link);
+        //Listening for commands
         try {
             urlConnection = (HttpsURLConnection) url.openConnection();
             InputStream in = urlConnection.getInputStream();
@@ -44,17 +50,19 @@ public class Listener {
                 Command.online(commandWithoutPrefix);
             }
             post(data.getId());
-
         } catch (Exception e) {
             e.printStackTrace();
+            Config.setEmpty(true);
         }
         finally {
             urlConnection.disconnect();
         }
     }
-
+    
+    //Posting to the server that the command has been executed
     @SneakyThrows
     private static void post(int id) {
+        Config.setEmpty(false);
         String link = "https://pro.minestorecms.com/api/servers/" + Config.getSecretKey() + "/commands/executed/" + id;
         URL url = new URL(link);
         urlConnection = (HttpsURLConnection) url.openConnection();
