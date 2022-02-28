@@ -59,7 +59,7 @@ public class Config {
 
     @Setter
     @Getter
-    private static int apiKey;
+    private static String apiKey;
 
     @Setter
     @Getter

@@ -141,6 +141,6 @@ public final class MineStore extends JavaPlugin {
         Config.setItemName(getConfig().getString("format.item-name"));
         Config.setItemDescription(getConfig().getString("format.item-description"));
         Config.setItemPrice(getConfig().getString("format.item-price"));
-        Config.setApiKey(Integer.parseInt(getConfig().getString("api-key")));
+        Config.setApiKey(getConfig().getString("api-key"));
     }
 }

@@ -63,7 +63,12 @@ public class Listener {
     @SneakyThrows
     private static void post(int id) {
         Config.setEmpty(false);
-        String link = "https://pro.minestorecms.com/api/servers/" + Config.getSecretKey() + "/commands/executed/" + id;
+        String link;
+        if (Config.getSecretKey().equalsIgnoreCase("") || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
+            link = Config.getApiUrl() + "servers/commands/executed/" + id;
+        } else {
+            link = Config.getApiUrl() + "servers/" + Config.getSecretKey() + "/commands/executed/" + id;
+        }
         URL url = new URL(link);
         urlConnection = (HttpsURLConnection) url.openConnection();
         urlConnection.setRequestMethod("POST");

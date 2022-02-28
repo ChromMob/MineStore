@@ -27,4 +27,8 @@ public class MySQLData {
     @Getter
     @Setter
     private static String password;
+
+    @Getter
+    @Setter
+    private static String method;
 }

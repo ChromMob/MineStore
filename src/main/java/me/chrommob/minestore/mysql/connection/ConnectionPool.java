@@ -53,7 +53,7 @@ public class ConnectionPool {
     private void setupPool() {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(
-                "jdbc:mysql://" +
+                "jdbc:mariadb://" +
                         hostname +
                         ":" +
                         port +
@@ -61,7 +61,7 @@ public class ConnectionPool {
                         database +
                         "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
         );
-        config.setDriverClassName("com.mysql.jdbc.Driver");
+        config.setDriverClassName("org.mariadb.jdbc.Driver");
         config.setUsername(username);
         config.setPassword(password);
         config.setMinimumIdle(minimumConnections);

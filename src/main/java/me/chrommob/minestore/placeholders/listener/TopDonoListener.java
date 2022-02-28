@@ -19,9 +19,9 @@ public class TopDonoListener {
     private static HttpsURLConnection urlConnection;
     @SneakyThrows
     public static void run() {
-        if (Config.getApiKey() != 0) {
+        if (!(Config.getApiUrl().equalsIgnoreCase("hard_api_key_here") || Config.getApiUrl().equalsIgnoreCase(""))) {
+            String link = Config.getApiUrl() + Config.getApiKey() + "/top_donators";
             try {
-                String link = Config.getApiUrl() + Config.getApiKey() + "/top_donators";
                 URL url = new URL(link);
                 urlConnection = (HttpsURLConnection) url.openConnection();
                 InputStream inputStream = urlConnection.getInputStream();
@@ -31,11 +31,12 @@ public class TopDonoListener {
                 PlaceHolderData.setTopDonoObjects(gson.fromJson(inputStreamReader, listType));
                 PlaceHolderData.createTopMap();
             } catch (Exception e) {
+                Bukkit.getLogger().info("[MineStore] Error while getting top donators from "+ link);
                 e.printStackTrace();
             }
         } else {
+            String link = Config.getApiUrl() + "top_donators";
             try {
-                String link = Config.getApiUrl() + "top_donators";
                 URL url = new URL(link);
                 urlConnection = (HttpsURLConnection) url.openConnection();
                 InputStream inputStream = urlConnection.getInputStream();
@@ -45,6 +46,7 @@ public class TopDonoListener {
                 PlaceHolderData.setTopDonoObjects(gson.fromJson(inputStreamReader, listType));
                 PlaceHolderData.createTopMap();
             } catch (Exception e) {
+                Bukkit.getLogger().info("[MineStore] Error while getting top donators from "+ link);
                 e.printStackTrace();
             }
         }

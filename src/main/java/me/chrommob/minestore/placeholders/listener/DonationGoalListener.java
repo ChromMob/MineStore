@@ -21,7 +21,7 @@ public class DonationGoalListener {
     @SneakyThrows
     //Trying to get the donation goal from the server with the secret key
     public static void run() {
-        if (Config.getApiKey() != 0) {
+        if (!(Config.getApiUrl().equalsIgnoreCase("hard_api_key_here") || Config.getApiUrl().equalsIgnoreCase(""))) {
             try {
                 String link = Config.getApiUrl() + Config.getApiKey() + "/donation_goal";
                 URL url = new URL(link);
