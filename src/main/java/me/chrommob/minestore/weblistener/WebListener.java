@@ -2,10 +2,11 @@ package me.chrommob.minestore.weblistener;
 
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
+import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.commandexecution.Command;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.weblistener.objects.WebListenerObjects;
-import org.bukkit.Bukkit;
+import org.spongepowered.api.Sponge;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -13,16 +14,23 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
-public class Listener {
+public class WebListener {
     private static HttpsURLConnection urlConnection;
+    Config config;
 
     @SneakyThrows
-    public static void run() {
+    public boolean run() {
+        config = MineStore.instance.getConfigData();
         String link;
-        if (Config.getSecretKey().equalsIgnoreCase("") || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
-            link = Config.getApiUrl() + "servers/commands/queue";
-        } else {
-            link = Config.getApiUrl() + "servers/" + Config.getSecretKey() + "/commands/queue";
+        try {
+            if (MineStore.instance.getConfigData().getSecret_key().equalsIgnoreCase("") || MineStore.instance.getConfigData().getSecret_key().equalsIgnoreCase("secret_key")) {
+                link = config.getApi_link() + "servers/commands/queue";
+            } else {
+                link = config.getApi_link() + "servers/" + config.getSecret_key() + "/commands/queue";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         WebListenerObjects data = new WebListenerObjects();
         URL url = new URL(link);
@@ -40,19 +48,20 @@ public class Listener {
             }
 
             if (data.getCommand() == null) {
-                return;
+                return false;
             }
             String commandWithoutPrefix = data.getCommand().replaceFirst("/", "");
             commandWithoutPrefix = commandWithoutPrefix.replaceFirst("   ", " ");
-            if (Bukkit.getPlayer(data.getUsername()) == null && data.isPlayerOnlineNeeded()) {
+            if (!Sponge.getServer().getPlayer(data.getUsername()).isPresent() && data.isPlayerOnlineNeeded()) {
                 Command.offline(data.getUsername(), commandWithoutPrefix);
             } else {
                 Command.online(commandWithoutPrefix);
             }
             post(data.getId());
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            Config.setEmpty(true);
+            return false;
         }
         finally {
             urlConnection.disconnect();
@@ -61,13 +70,12 @@ public class Listener {
     
     //Posting to the server that the command has been executed
     @SneakyThrows
-    private static void post(int id) {
-        Config.setEmpty(false);
+    private void post(int id) {
         String link;
-        if (Config.getSecretKey().equalsIgnoreCase("") || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
-            link = Config.getApiUrl() + "servers/commands/executed/" + id;
+        if (MineStore.instance.getConfigData().getSecret_key().equalsIgnoreCase("") || MineStore.instance.getConfigData().getSecret_key().equalsIgnoreCase("secret_key")) {
+            link = config.getApi_link() + "servers/commands/executed/" + id;
         } else {
-            link = Config.getApiUrl() + "servers/" + Config.getSecretKey() + "/commands/executed/" + id;
+            link = config.getApi_link() + "servers/" + config.getSecret_key() + "/commands/executed/" + id;
         }
         URL url = new URL(link);
         urlConnection = (HttpsURLConnection) url.openConnection();

@@ -1,6 +1,6 @@
 package me.chrommob.minestore;
 
-import co.aikar.commands.PaperCommandManager;
+import com.google.inject.Inject;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -8,155 +8,135 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
 import me.chrommob.minestore.commandexecution.JoinQuitListener;
-import me.chrommob.minestore.commands.Buy;
 import me.chrommob.minestore.commands.PunishmentManager;
-import me.chrommob.minestore.commands.Reload;
-import me.chrommob.minestore.commands.Store;
 import me.chrommob.minestore.data.Config;
-import me.chrommob.minestore.gui.Event;
-import me.chrommob.minestore.mysql.MySQLData;
-import me.chrommob.minestore.mysql.connection.ConnectionPool;
-import me.chrommob.minestore.mysql.data.UserManager;
-import me.chrommob.minestore.placeholders.PlaceholderHook;
-import me.chrommob.minestore.util.ModeDatabase;
-import me.chrommob.minestore.util.ModeListener;
-import me.chrommob.minestore.util.Runnable;
+import me.chrommob.minestore.weblistener.WebListener;
 import me.chrommob.minestore.websocket.Socket;
-import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.slf4j.Logger;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.config.DefaultConfig;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.plugin.Plugin;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
-public final class MineStore extends JavaPlugin {
-    @Getter
-    UserManager userManager;
+@Plugin(id = "minestore", name = "MineStore", version = "1.2.0")
+public class MineStore {
+    @Inject private Logger logger;
     public static MineStore instance;
-    ModeListener modeListener = ModeListener.WEBSOCKET;
-    ModeDatabase modeDatabase = ModeDatabase.MYSQL;
+    private WebListener webListener;
 
-    @Override
-    public void onLoad() {
-        saveDefaultConfig();
-    }
+    @Inject
+    @DefaultConfig(sharedRoot = true)
+    private Path defaultConfig;
 
-    @Override
-    public void onEnable() {
+    private Map<String, Object> config = new HashMap<>();
+
+    @Getter
+    private Config configData;
+
+    @Listener
+    public void onServerStart(GameStartedServerEvent event) {
         instance = this;
-        Metrics metrics = new Metrics(this, 14043);
-        dependencyCheck();
-        PluginManager plManager = Bukkit.getPluginManager();
-        PaperCommandManager manager = new PaperCommandManager(this);
-        manager.registerCommand(new Reload());
-        plManager.registerEvents(new JoinQuitListener(), this);
-        plManager.registerEvents(new Event(this), this);
+        webListener = new WebListener();
+        logger.info("Starting MineStore...");
+        logger.info("Loading config...");
         PunishmentManager.create();
         PunishmentManager.get();
-        loadConfig();
-        if (getConfig().getString("mode").equalsIgnoreCase("WEBSOCKET")) {
-            modeListener = ModeListener.WEBSOCKET;
-        } else {
-            modeListener = ModeListener.WEBLISTENER;
-        }
-        if (getConfig().getString("mysql.method").equalsIgnoreCase("MYSQL")) {
-            modeDatabase = ModeDatabase.MYSQL;
-        } else {
-            modeDatabase = ModeDatabase.MARIADB;
-        }
-        MySQLData.setEnabled(getConfig().getBoolean("mysql.enabled"));
-        Config.setStoreEnabled(getConfig().getBoolean("store-enabled"));
-        Config.setPort(getConfig().getInt("port"));
-        Config.setGuiEnabled(getConfig().getBoolean("gui-enabled"));
-        if (modeListener == ModeListener.WEBSOCKET) {
-            Runnable.runListener("NO");
+
+        Sponge.getEventManager().registerListeners(this, new JoinQuitListener());
+
+        createConfig();
+        //startListener();
+        //startSocket();
+    }
+
+    private void createConfig(){
+        File file = new File(privateConfigDir + "/config.yml");
+        if (file.exists()){
+            logger.info("Config file found.");
             try {
-                NettyServer(Config.getPort());
+                InputStream inputStream = Files.newInputStream(new File(privateConfigDir + "/config.yml").toPath());
+                Yaml yaml = new Yaml(new Constructor(Config.class));
+                configData = (Config) yaml.load(inputStream);
+                logger.info("Config loaded.");
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         } else {
-            Runnable.runListener("web");
-            Bukkit.getLogger().info("[MineStore] Starting web listener...");
-        }
-        if (Config.isGuiEnabled()) {
-            manager.registerCommand(new Buy(this));
-            Bukkit.getLogger().info("[MineStore] Starting gui listener...");
-        }
-        if (Config.isStoreEnabled()) {
-            manager.registerCommand(new Store());
-        }
-        if (MySQLData.isEnabled() && Config.isVaultPresent()) {
-            if (modeDatabase == null) {
-                MySQLData.setMethod(ModeDatabase.MYSQL);
-            } else {
-                MySQLData.setMethod(modeDatabase);
+            logger.info("Config file not found. Creating new one.");
+            configData = new Config();
+            configData.setApi_link("https://example.yourdomain.com/api/");
+            configData.setApi_key("api_key");
+            configData.setMode("dev");
+            configData.setSecret_key("secret_key");
+            try {
+                file.createNewFile();
+                PrintWriter writer = new PrintWriter(privateConfigDir + "/config.yml");
+                Yaml yaml = new Yaml();
+                yaml.dump(configData, writer);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            new ConnectionPool(this);
-            ConnectionPool.createTable();
-            userManager = new UserManager();
         }
+        startListener();
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
-
-    private void dependencyCheck() {
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            Bukkit.getLogger().info("[MineStore] PlaceholderAPI found!");
-            Config.setPlaceholderPresent(false);
-        } else {
-            Config.setPlaceholderPresent(true);
-            new PlaceholderHook(this).register();
-        }
-        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
-            Bukkit.getLogger().info("[MineStore] Vault found!");
-            Config.setVaultPresent(false);
-        }
-        else {
-            Config.setVaultPresent(true);
-        }
-    }
-
-    private void NettyServer(int port) throws Exception
-    {
+    /*private void startSocket() {
+        int port = Config.getPort();
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
 
         ServerBootstrap serverBootstrap = new ServerBootstrap();
-            getLogger().info("Starting Server at " + port);
+        getLogger().info("Starting Server at " + port);
 
-            serverBootstrap.group(eventLoopGroup, worker)
-                    .channel(NioServerSocketChannel.class)
-                    .childHandler(new Socket())
-                    .childOption(ChannelOption.SO_KEEPALIVE, true);
+        serverBootstrap.group(eventLoopGroup, worker)
+                .channel(NioServerSocketChannel.class)
+                .childHandler(new Socket())
+                .childOption(ChannelOption.SO_KEEPALIVE, true);
 
+        try {
             serverBootstrap.bind(port).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+    private void startListener() {
+        new Thread( () -> {
+            while (true) {
+                if (webListener.run()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        Thread.sleep(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
-    public void loadConfig() {
-        reloadConfig();
-        MySQLData.setIp(getConfig().getString("mysql.ip"));
-        MySQLData.setPort(getConfig().getInt("mysql.port"));
-        MySQLData.setUser(getConfig().getString("mysql.username"));
-        MySQLData.setPassword(getConfig().getString("mysql.password"));
-        MySQLData.setDatabase(getConfig().getString("mysql.database"));
-        Config.setPassword(getConfig().getString("password"));
-        Config.setApiUrl(getConfig().getString("store-api"));
-        Config.setStoreMessage(getConfig().getString("store-message"));
-        Config.setSecretKey(getConfig().getString("secret-key"));
-        Config.setGuiName(getConfig().getString("settings.name"));
-        Config.setPackageMessage(getConfig().getString("settings.message"));
-        Config.setBuyUrl(getConfig().getString("settings.api-url"));
-        Config.setItemName(getConfig().getString("format.item-name"));
-        Config.setItemDescription(getConfig().getString("format.item-description"));
-        Config.setItemPrice(getConfig().getString("format.item-price"));
-        Config.setApiKey(getConfig().getString("api-key"));
-        String version = Bukkit.getServer().getBukkitVersion();
-        version = version.split("-")[0];
-        version = version.split("\\.")[1];
-        int versionInt = Integer.parseInt(version);
-        Config.setVersion(versionInt);
+    @Getter
+    @Inject
+    @ConfigDir(sharedRoot = false)
+    private Path privateConfigDir;
+
+    public Logger getLogger() {
+        return logger;
     }
 }

@@ -2,10 +2,11 @@ package me.chrommob.minestore.websocket;
 
 import com.google.gson.Gson;
 import io.netty.channel.SimpleChannelInboundHandler;
+import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.commandexecution.Command;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.websocket.objects.SocketObjects;
-import org.bukkit.Bukkit;
+import org.spongepowered.api.Sponge;
 
 public class SocketHandler extends SimpleChannelInboundHandler<String> {
 
@@ -18,12 +19,12 @@ public class SocketHandler extends SimpleChannelInboundHandler<String> {
         String commandWithoutPrefix = data.getCommand().replaceFirst("/", "");
         commandWithoutPrefix = commandWithoutPrefix.replaceFirst("   ", " ");
         //Checking if the password is correct
-        if (!data.getPassword().equalsIgnoreCase(Config.getPassword())) {
-            Bukkit.getLogger().info("[MineStore] Wrong password!");
+        if (!data.getPassword().equalsIgnoreCase("")) {
+            MineStore.instance.getLogger().info("[MineStore] Wrong password!");
             return;
         }
         //Executing the command
-        if (Bukkit.getPlayer(data.getUsername()) == null && data.isPlayerOnlineNeeded()) {
+        if (!Sponge.getServer().getPlayer(data.getUsername()).isPresent() && data.isPlayerOnlineNeeded()) {
             Command.offline(data.getUsername(), commandWithoutPrefix);
         } else {
             Command.online(commandWithoutPrefix);
