@@ -1,12 +1,12 @@
 package me.chrommob.minestore.listeners;
 
-import me.chrommob.minestore.storage.PunishmentManager;
+import me.chrommob.minestore.commands.PunishmentManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import static me.chrommob.minestore.commandsend.Command.runLater;
+import static me.chrommob.minestore.commandexecution.Command.runLater;
 
 
 public class JoinQuitListener implements Listener {
