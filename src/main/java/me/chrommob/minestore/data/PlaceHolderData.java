@@ -7,8 +7,6 @@ import me.chrommob.minestore.placeholders.objects.LastDonator;
 import me.chrommob.minestore.placeholders.objects.TopDonoObjects;
 import me.chrommob.minestore.util.HashMapSort;
 import me.chrommob.minestore.util.HashMapSortDate;
-import org.bukkit.Bukkit;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,6 +46,7 @@ public class PlaceHolderData {
     private static double donationGoalSum;
 
     private static int i;
+
     public static void createTopMap() {
         i = 0;
         donators.clear();
@@ -61,16 +60,17 @@ public class PlaceHolderData {
             i++;
             topDonators.put(i, k);
             topDonations.put(i, v);
-        } );
+        });
     }
 
     private static int x;
+
     @SneakyThrows
     public static void createLastMap() {
         x = 0;
         HashMap<Integer, Date> prices = new HashMap<>();
         for (int i = 0; i < lastDonatorsObjects.size(); i++) {
-            Date date =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(lastDonatorsObjects.get(i).getDate());
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(lastDonatorsObjects.get(i).getDate());
             prices.put(i, date);
         }
         prices = HashMapSortDate.sortByValue(prices);
@@ -78,6 +78,6 @@ public class PlaceHolderData {
             x++;
             lastDonator.put(x, lastDonatorsObjects.get(k).getName());
             lastDonatorPrice.put(x, lastDonatorsObjects.get(k).getAmount());
-        } );
+        });
     }
 }

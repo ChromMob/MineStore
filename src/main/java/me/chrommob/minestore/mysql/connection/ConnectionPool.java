@@ -5,7 +5,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.mysql.MySQLData;
 import me.chrommob.minestore.mysql.data.User;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.Connection;
@@ -31,7 +30,7 @@ public class ConnectionPool {
     private long connectionTimeout;
 
     public ConnectionPool(MineStore plugin) {
-        this.plugin = plugin;
+        ConnectionPool.plugin = plugin;
         init();
         setupPool();
     }
@@ -41,7 +40,7 @@ public class ConnectionPool {
 
         this.username = MySQLData.getUser();
         this.password = MySQLData.getPassword();
-        this.database = MySQLData.getDatabase();
+        ConnectionPool.database = MySQLData.getDatabase();
         this.hostname = MySQLData.getIp();
         this.port = String.valueOf(MySQLData.getPort());
 
@@ -59,8 +58,7 @@ public class ConnectionPool {
                         port +
                         "/" +
                         database +
-                        "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
-        );
+                        "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         config.setDriverClassName("org.mariadb.jdbc.Driver");
         config.setUsername(username);
         config.setPassword(password);
@@ -71,17 +69,27 @@ public class ConnectionPool {
         config.setIdleTimeout(600000);
         config.setMaxLifetime(1800000);
 
-        //config.setConnectionTestQuery(testQuery);
+        // config.setConnectionTestQuery(testQuery);
         hikari = new HikariDataSource(config);
     }
 
-
     public static void close(Connection conn, PreparedStatement ps, ResultSet res) {
-        if (conn != null) try { conn.close(); } catch (SQLException ignored) {}
-        if (ps != null) try { ps.close(); } catch (SQLException ignored) {}
-        if (res != null) try { res.close(); } catch (SQLException ignored) {}
+        if (conn != null)
+            try {
+                conn.close();
+            } catch (SQLException ignored) {
+            }
+        if (ps != null)
+            try {
+                ps.close();
+            } catch (SQLException ignored) {
+            }
+        if (res != null)
+            try {
+                res.close();
+            } catch (SQLException ignored) {
+            }
     }
-
 
     public static void closePool() {
         if (hikari != null && !hikari.isClosed()) {
@@ -89,7 +97,7 @@ public class ConnectionPool {
         }
     }
 
-    public static void createTable(){
+    public static void createTable() {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -105,8 +113,7 @@ public class ConnectionPool {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             close(conn, ps, null);
         }
     }
@@ -115,9 +122,8 @@ public class ConnectionPool {
         try {
             Map<UUID, User> userMap = MineStore.instance.getUserManager().getAll();
             userMap.forEach((uuid, user) -> {
-                        update(user);
-                    }
-            );
+                update(user);
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,14 +143,14 @@ public class ConnectionPool {
             String suffix;
             String group;
             if (user.getPrefix() == null) {
-                 prefix = "";
+                prefix = "";
             } else {
-                 prefix = user.getPrefix();
+                prefix = user.getPrefix();
             }
             if (user.getSuffix() == null) {
-                 suffix = "";
+                suffix = "";
             } else {
-                 suffix = user.getSuffix();
+                suffix = user.getSuffix();
             }
             if (user.getGroup_name() == null) {
                 group = "";
@@ -165,8 +171,7 @@ public class ConnectionPool {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             close(conn, ps, null);
         }
     }
