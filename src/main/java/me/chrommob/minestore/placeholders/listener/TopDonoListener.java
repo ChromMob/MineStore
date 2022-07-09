@@ -46,8 +46,11 @@ public class TopDonoListener {
                 PlaceHolderData.setTopDonoObjects(gson.fromJson(inputStreamReader, listType));
                 PlaceHolderData.createTopMap();
             } catch (Exception e) {
-                Bukkit.getLogger().info("[MineStore] Error while getting top donators from "+ link);
-                e.printStackTrace();
+                if (e instanceof ClassCastException){
+                    Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
     }

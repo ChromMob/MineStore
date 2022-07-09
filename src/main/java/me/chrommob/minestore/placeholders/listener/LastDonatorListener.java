@@ -47,7 +47,11 @@ public class LastDonatorListener {
                 PlaceHolderData.setLastDonatorsObjects(gson.fromJson(inputStreamReader, listType));
                 PlaceHolderData.createLastMap();
             } catch (Exception e) {
-                e.printStackTrace();
+                if (e instanceof ClassCastException){
+                    Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
     }

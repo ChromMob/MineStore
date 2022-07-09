@@ -48,7 +48,11 @@ public class DonationGoalListener {
                 PlaceHolderData.setDonationGoal(donationGoal.getGoal());
                 PlaceHolderData.setDonationGoalSum(donationGoal.getGoalSum());
             } catch (Exception e) {
-                e.printStackTrace();
+                if (e instanceof ClassCastException){
+                    Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -51,8 +51,12 @@ public class Listener {
             }
             post(data.getId());
         } catch (Exception e) {
-            e.printStackTrace();
-            Config.setEmpty(true);
+            if (e instanceof ClassCastException){
+                Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
+            } else {
+                e.printStackTrace();
+                Config.setEmpty(true);
+            }
         }
         finally {
             urlConnection.disconnect();

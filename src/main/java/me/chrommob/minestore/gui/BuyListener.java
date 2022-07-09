@@ -29,7 +29,11 @@ public class BuyListener {
             GuiData.setData(new Gson().fromJson(inputStreamReader, listType));
             GuiData.createSub();
         } catch (Exception e) {
-            e.printStackTrace();
+            if (e instanceof ClassCastException){
+                Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
+            } else {
+                e.printStackTrace();
+            }
         }
     }
 }
