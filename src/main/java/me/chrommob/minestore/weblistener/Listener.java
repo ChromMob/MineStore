@@ -45,7 +45,7 @@ public class Listener {
             }
             String commandWithoutPrefix = data.getCommand();
             String[] commandArray = commandWithoutPrefix.split(" ");
-            commandArray[0].replaceFirst("/", "");
+            commandArray[0] = commandArray[0].replaceFirst("/", "");
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(commandArray[0]);
             if (commandArray.length > 1) {
