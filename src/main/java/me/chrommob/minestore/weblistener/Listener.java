@@ -19,14 +19,15 @@ public class Listener {
     @SneakyThrows
     public static void run() {
         String link;
-        if (Config.getSecretKey().equalsIgnoreCase("") || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
+        if (Config.getSecretKey().equalsIgnoreCase("")
+                || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
             link = Config.getApiUrl() + "servers/commands/queue";
         } else {
             link = Config.getApiUrl() + "servers/" + Config.getSecretKey() + "/commands/queue";
         }
         WebListenerObjects data = new WebListenerObjects();
         URL url = new URL(link);
-        //Listening for commands
+        // Listening for commands
         try {
             urlConnection = (HttpsURLConnection) url.openConnection();
             InputStream in = urlConnection.getInputStream();
@@ -42,7 +43,16 @@ public class Listener {
             if (data.getCommand() == null) {
                 return;
             }
-            String commandWithoutPrefix = data.getCommand().replaceFirst("/", "");
+            String commandWithoutPrefix = data.getCommand();
+            String[] commandArray = commandWithoutPrefix.split(" ");
+            commandArray[0].replaceFirst("/", "");
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(commandArray[0]);
+            if (commandArray.length > 1) {
+                for (String part : commandArray) {
+                    stringBuilder.append(" " + part);
+                }
+            }
             commandWithoutPrefix = commandWithoutPrefix.replaceFirst("   ", " ");
             if (Bukkit.getPlayer(data.getUsername()) == null && data.isPlayerOnlineNeeded()) {
                 Command.offline(data.getUsername(), commandWithoutPrefix);
@@ -51,24 +61,24 @@ public class Listener {
             }
             post(data.getId());
         } catch (Exception e) {
-            if (e instanceof ClassCastException){
+            if (e instanceof ClassCastException) {
                 Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
             } else {
                 e.printStackTrace();
                 Config.setEmpty(true);
             }
-        }
-        finally {
+        } finally {
             urlConnection.disconnect();
         }
     }
-    
-    //Posting to the server that the command has been executed
+
+    // Posting to the server that the command has been executed
     @SneakyThrows
     private static void post(int id) {
         Config.setEmpty(false);
         String link;
-        if (Config.getSecretKey().equalsIgnoreCase("") || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
+        if (Config.getSecretKey().equalsIgnoreCase("")
+                || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
             link = Config.getApiUrl() + "servers/commands/executed/" + id;
         } else {
             link = Config.getApiUrl() + "servers/" + Config.getSecretKey() + "/commands/executed/" + id;
@@ -80,7 +90,7 @@ public class Listener {
         urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
         urlConnection.setDoOutput(true);
         try (final OutputStream os = urlConnection.getOutputStream()) {
-            //get current time in milliseconds
+            // get current time in milliseconds
             os.write(id);
         }
         urlConnection.getInputStream();
