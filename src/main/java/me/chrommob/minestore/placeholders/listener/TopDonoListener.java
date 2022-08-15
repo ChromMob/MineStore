@@ -16,9 +16,9 @@ import java.net.URL;
 import java.util.List;
 
 public class TopDonoListener {
-    private static HttpsURLConnection urlConnection;
     @SneakyThrows
     public static void run() {
+        HttpsURLConnection urlConnection;
         if (!(Config.getApiUrl().equalsIgnoreCase("hard_api_key_here") || Config.getApiUrl().equalsIgnoreCase(""))) {
             String link = Config.getApiUrl() + Config.getApiKey() + "/top_donators";
             try {
@@ -31,8 +31,11 @@ public class TopDonoListener {
                 PlaceHolderData.setTopDonoObjects(gson.fromJson(inputStreamReader, listType));
                 PlaceHolderData.createTopMap();
             } catch (Exception e) {
-                Bukkit.getLogger().info("[MineStore] Error while getting top donators from "+ link);
-                e.printStackTrace();
+                if (e instanceof ClassCastException){
+                    Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
+                } else {
+                    e.printStackTrace();
+                }
             }
         } else {
             String link = Config.getApiUrl() + "top_donators";

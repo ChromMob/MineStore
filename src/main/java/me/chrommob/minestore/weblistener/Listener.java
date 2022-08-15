@@ -2,6 +2,7 @@ package me.chrommob.minestore.weblistener;
 
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
+import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.commandexecution.Command;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.weblistener.objects.WebListenerObjects;
@@ -11,6 +12,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
 import java.net.URL;
 
 public class Listener {
@@ -63,6 +65,8 @@ public class Listener {
         } catch (Exception e) {
             if (e instanceof ClassCastException) {
                 Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
+            } else if (e instanceof SocketException) {
+                Bukkit.getLogger().info("Please check your internet connection.");
             } else {
                 e.printStackTrace();
                 Config.setEmpty(true);
