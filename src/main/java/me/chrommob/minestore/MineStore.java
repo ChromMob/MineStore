@@ -27,6 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 
@@ -134,7 +135,7 @@ public final class MineStore extends JavaPlugin {
         MySQLData.setPassword(getConfig().getString("mysql.password"));
         MySQLData.setDatabase(getConfig().getString("mysql.database"));
         Config.setPassword(getConfig().getString("password"));
-        Config.setApiUrl(new HashSet());
+        Config.setApiUrl(new ArrayList<>());
         Config.getApiUrl().add(getConfig().getString("store-api"));
         String url = getConfig().getString("store-api");
         for (int i = 1; url != null; i++){

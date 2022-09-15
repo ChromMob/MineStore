@@ -15,7 +15,7 @@ public class Currency {
 
     public static void run() {
         HttpsURLConnection urlConnection;
-        if (!(Config.getApiUrl().equalsIgnoreCase("hard_api_key_here") || Config.getApiUrl().equalsIgnoreCase(""))) {
+        if (!(Config.getApiUrl().get(0).equalsIgnoreCase("hard_api_key_here") || Config.getApiUrl().get(0).equalsIgnoreCase(""))) {
             try {
                 String link = Config.getApiUrl() + Config.getApiKey() + "/getMainCurrency";
                 URL url = new URL(link);

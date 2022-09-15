@@ -4,6 +4,7 @@ package me.chrommob.minestore.data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Config {
@@ -29,7 +30,7 @@ public class Config {
 
     @Getter
     @Setter
-    private static HashSet apiUrl;
+    private static ArrayList<String> apiUrl;
 
     @Getter
     @Setter
@@ -73,5 +74,5 @@ public class Config {
 
     @Setter
     @Getter
-    private static boolean empty;
+    private static ArrayList<Boolean> empty = new ArrayList<>();
 }

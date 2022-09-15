@@ -19,7 +19,7 @@ public class Listener {
     private static HttpsURLConnection urlConnection;
 
     @SneakyThrows
-    public static void run(String apiURL) {
+    public static void run(String apiURL, int index) {
         String link;
         if (apiURL.equalsIgnoreCase("")
                 || apiURL.equalsIgnoreCase("hard_secret_key_here")) {
@@ -61,7 +61,7 @@ public class Listener {
             } else {
                 Command.online(commandWithoutPrefix);
             }
-            post(data.getId(), apiURL);
+            post(data.getId(), apiURL, index);
         } catch (Exception e) {
             if (e instanceof ClassCastException) {
                 Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
@@ -69,7 +69,7 @@ public class Listener {
                 Bukkit.getLogger().info("Please check your internet connection.");
             } else {
                 e.printStackTrace();
-                Config.setEmpty(true);
+                Config.getEmpty().set(index, true);
             }
         } finally {
             urlConnection.disconnect();
@@ -78,8 +78,8 @@ public class Listener {
 
     // Posting to the server that the command has been executed
     @SneakyThrows
-    private static void post(int id, String apiURL) {
-        Config.setEmpty(false);
+    private static void post(int id, String apiURL, int index) {
+        Config.getEmpty().set(index, true);
         String link;
         if (apiURL.equalsIgnoreCase("")
                 || apiURL.equalsIgnoreCase("hard_secret_key_here")) {

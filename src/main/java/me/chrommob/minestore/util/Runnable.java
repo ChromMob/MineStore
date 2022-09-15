@@ -23,8 +23,12 @@ public class Runnable {
     private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     public static void runListener(String load) {
         executor.scheduleAtFixedRate(() -> {
-            if (load.equalsIgnoreCase("web") && Config.isEmpty()) {
-                Listener.run();
+            if (load.equalsIgnoreCase("web")) {
+                for (int i = 0; i < Config.getApiUrl().size(); i++) {
+                    if (Config.getEmpty().get(i) == true) {
+                        Listener.run(Config.getApiUrl().get(i), i);
+                    }
+                }
             }
             if (Config.isGuiEnabled()) {
                 BuyListener.run();
@@ -41,8 +45,12 @@ public class Runnable {
             }
         } , 0, 30, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(() -> {
-            if (load.equalsIgnoreCase("web") && !Config.isEmpty()) {
-                Listener.run();
+            if (load.equalsIgnoreCase("web")) {
+                for (int i = 0; i < Config.getApiUrl().size(); i++) {
+                    if (Config.getEmpty().get(i) == false) {
+                        Listener.run(Config.getApiUrl().get(i), i);
+                    }
+                }
             }
         } , 0, 1, TimeUnit.SECONDS);
     }
