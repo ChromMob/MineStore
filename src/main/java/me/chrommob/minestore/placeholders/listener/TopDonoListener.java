@@ -20,7 +20,7 @@ public class TopDonoListener {
     public static void run() {
         HttpsURLConnection urlConnection;
         if (!(Config.getApiUrl().get(0).equalsIgnoreCase("hard_api_key_here") || Config.getApiUrl().get(0).equalsIgnoreCase(""))) {
-            String link = Config.getApiUrl() + Config.getApiKey() + "/top_donators";
+            String link = Config.getApiUrl().get(0) + Config.getApiKey().get(0) + "/top_donators";
             try {
                 URL url = new URL(link);
                 urlConnection = (HttpsURLConnection) url.openConnection();

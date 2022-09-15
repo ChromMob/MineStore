@@ -26,7 +26,7 @@ public class Runnable {
             if (load.equalsIgnoreCase("web")) {
                 for (int i = 0; i < Config.getApiUrl().size(); i++) {
                     if (Config.getEmpty().get(i) == true) {
-                        Listener.run(Config.getApiUrl().get(i), i);
+                        Listener.run(i);
                     }
                 }
             }
@@ -48,7 +48,7 @@ public class Runnable {
             if (load.equalsIgnoreCase("web")) {
                 for (int i = 0; i < Config.getApiUrl().size(); i++) {
                     if (Config.getEmpty().get(i) == false) {
-                        Listener.run(Config.getApiUrl().get(i), i);
+                        Listener.run(i);
                     }
                 }
             }

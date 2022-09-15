@@ -19,13 +19,13 @@ public class Listener {
     private static HttpsURLConnection urlConnection;
 
     @SneakyThrows
-    public static void run(String apiURL, int index) {
+    public static void run(int index) {
         String link;
-        if (apiURL.equalsIgnoreCase("")
-                || apiURL.equalsIgnoreCase("hard_secret_key_here")) {
-            link = Config.getApiUrl() + "servers/commands/queue";
+        if (Config.getApiKey().get(index).equalsIgnoreCase("")
+                || Config.getApiKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
+            link = Config.getApiUrl().get(index) + "servers/commands/queue";
         } else {
-            link = Config.getApiUrl() + "servers/" + apiURL + "/commands/queue";
+            link = Config.getApiUrl() + "servers/" + Config.getApiKey().get(index) + "/commands/queue";
         }
         WebListenerObjects data = new WebListenerObjects();
         URL url = new URL(link);
@@ -61,7 +61,7 @@ public class Listener {
             } else {
                 Command.online(commandWithoutPrefix);
             }
-            post(data.getId(), apiURL, index);
+            post(data.getId(), index);
         } catch (Exception e) {
             if (e instanceof ClassCastException) {
                 Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
@@ -78,14 +78,14 @@ public class Listener {
 
     // Posting to the server that the command has been executed
     @SneakyThrows
-    private static void post(int id, String apiURL, int index) {
+    private static void post(int id, int index) {
         Config.getEmpty().set(index, true);
         String link;
-        if (apiURL.equalsIgnoreCase("")
-                || apiURL.equalsIgnoreCase("hard_secret_key_here")) {
-            link = Config.getApiUrl() + "servers/commands/executed/" + id;
+        if (Config.getApiKey().get(index).equalsIgnoreCase("")
+                || Config.getApiKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
+            link = Config.getApiUrl().get(index) + "servers/commands/queue";
         } else {
-            link = Config.getApiUrl() + "servers/" + apiURL + "/commands/executed/" + id;
+            link = Config.getApiUrl() + "servers/" + Config.getApiKey().get(index) + "/commands/queue";
         }
         URL url = new URL(link);
         urlConnection = (HttpsURLConnection) url.openConnection();

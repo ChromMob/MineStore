@@ -22,7 +22,7 @@ public class LastDonatorListener {
     public static void run() {
         if (!(Config.getApiUrl().get(0).equalsIgnoreCase("hard_api_key_here") || Config.getApiUrl().get(0).equalsIgnoreCase(""))) {
             try {
-                String link = Config.getApiUrl() + Config.getApiKey() + "/getTotalPayments";
+                String link = Config.getApiUrl().get(0) + Config.getApiKey().get(0) + "/getTotalPayments";
                 URL url = new URL(link);
                 urlConnection = (HttpsURLConnection) url.openConnection();
                 InputStream inputStream = urlConnection.getInputStream();

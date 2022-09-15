@@ -62,7 +62,7 @@ public class Config {
 
     @Setter
     @Getter
-    private static String apiKey;
+    private static ArrayList<String> apiKey = new ArrayList<>();
 
     @Setter
     @Getter

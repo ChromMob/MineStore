@@ -135,13 +135,20 @@ public final class MineStore extends JavaPlugin {
         MySQLData.setPassword(getConfig().getString("mysql.password"));
         MySQLData.setDatabase(getConfig().getString("mysql.database"));
         Config.setPassword(getConfig().getString("password"));
-        Config.setApiUrl(new ArrayList<>());
         Config.getApiUrl().add(getConfig().getString("store-api"));
         String url = getConfig().getString("store-api");
         for (int i = 1; url != null; i++){
             url = getConfig().getString("store-api-" + i);
             if (url != null) {
                 Config.getApiUrl().add(url);
+            }
+        }
+        Config.getApiKey().add(getConfig().getString("api-key"));
+        String key = getConfig().getString("api-key");
+        for (int i = 1; key != null; i++){
+            key = getConfig().getString("api-key-" + i);
+            if (key != null) {
+                Config.getApiKey().add(key);
             }
         }
         Config.setStoreMessage(getConfig().getString("store-message"));
@@ -152,6 +159,5 @@ public final class MineStore extends JavaPlugin {
         Config.setItemName(getConfig().getString("format.item-name"));
         Config.setItemDescription(getConfig().getString("format.item-description"));
         Config.setItemPrice(getConfig().getString("format.item-price"));
-        Config.setApiKey(getConfig().getString("api-key"));
     }
 }
