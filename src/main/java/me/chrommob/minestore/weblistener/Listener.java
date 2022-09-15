@@ -19,13 +19,13 @@ public class Listener {
     private static HttpsURLConnection urlConnection;
 
     @SneakyThrows
-    public static void run() {
+    public static void run(String apiURL) {
         String link;
-        if (Config.getSecretKey().equalsIgnoreCase("")
-                || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
+        if (apiURL.equalsIgnoreCase("")
+                || apiURL.equalsIgnoreCase("hard_secret_key_here")) {
             link = Config.getApiUrl() + "servers/commands/queue";
         } else {
-            link = Config.getApiUrl() + "servers/" + Config.getSecretKey() + "/commands/queue";
+            link = Config.getApiUrl() + "servers/" + apiURL + "/commands/queue";
         }
         WebListenerObjects data = new WebListenerObjects();
         URL url = new URL(link);
@@ -61,7 +61,7 @@ public class Listener {
             } else {
                 Command.online(commandWithoutPrefix);
             }
-            post(data.getId());
+            post(data.getId(), apiURL);
         } catch (Exception e) {
             if (e instanceof ClassCastException) {
                 Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
@@ -78,14 +78,14 @@ public class Listener {
 
     // Posting to the server that the command has been executed
     @SneakyThrows
-    private static void post(int id) {
+    private static void post(int id, String apiURL) {
         Config.setEmpty(false);
         String link;
-        if (Config.getSecretKey().equalsIgnoreCase("")
-                || Config.getSecretKey().equalsIgnoreCase("hard_secret_key_here")) {
+        if (apiURL.equalsIgnoreCase("")
+                || apiURL.equalsIgnoreCase("hard_secret_key_here")) {
             link = Config.getApiUrl() + "servers/commands/executed/" + id;
         } else {
-            link = Config.getApiUrl() + "servers/" + Config.getSecretKey() + "/commands/executed/" + id;
+            link = Config.getApiUrl() + "servers/" + apiURL + "/commands/executed/" + id;
         }
         URL url = new URL(link);
         urlConnection = (HttpsURLConnection) url.openConnection();

@@ -4,6 +4,8 @@ package me.chrommob.minestore.data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
+
 public class Config {
     @Getter
     @Setter
@@ -27,7 +29,7 @@ public class Config {
 
     @Getter
     @Setter
-    private static String apiUrl;
+    private static HashSet apiUrl;
 
     @Getter
     @Setter

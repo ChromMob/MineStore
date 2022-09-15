@@ -27,6 +27,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashSet;
+
 
 public final class MineStore extends JavaPlugin {
     @Getter
@@ -132,7 +134,15 @@ public final class MineStore extends JavaPlugin {
         MySQLData.setPassword(getConfig().getString("mysql.password"));
         MySQLData.setDatabase(getConfig().getString("mysql.database"));
         Config.setPassword(getConfig().getString("password"));
-        Config.setApiUrl(getConfig().getString("store-api"));
+        Config.setApiUrl(new HashSet());
+        Config.getApiUrl().add(getConfig().getString("store-api"));
+        String url = getConfig().getString("store-api");
+        for (int i = 1; url != null; i++){
+            url = getConfig().getString("store-api-" + i);
+            if (url != null) {
+                Config.getApiUrl().add(url);
+            }
+        }
         Config.setStoreMessage(getConfig().getString("store-message"));
         Config.setSecretKey(getConfig().getString("secret-key"));
         Config.setGuiName(getConfig().getString("settings.name"));
