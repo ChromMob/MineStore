@@ -21,11 +21,11 @@ public class Listener {
     @SneakyThrows
     public static void run(int index) {
         String link;
-        if (Config.getApiKey().get(index).equalsIgnoreCase("")
-                || Config.getApiKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
+        if (Config.getSecretKey().get(index).equalsIgnoreCase("")
+                || Config.getSecretKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
             link = Config.getApiUrl().get(index) + "servers/commands/queue";
         } else {
-            link = Config.getApiUrl() + "servers/" + Config.getApiKey().get(index) + "/commands/queue";
+            link = Config.getApiUrl() + "servers/" + Config.getSecretKey().get(index) + "/commands/queue";
         }
         WebListenerObjects data = new WebListenerObjects();
         URL url = new URL(link);
@@ -81,11 +81,11 @@ public class Listener {
     private static void post(int id, int index) {
         Config.getEmpty().set(index, true);
         String link;
-        if (Config.getApiKey().get(index).equalsIgnoreCase("")
-                || Config.getApiKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
+        if (Config.getSecretKey().get(index).equalsIgnoreCase("")
+                || Config.getSecretKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
             link = Config.getApiUrl().get(index) + "servers/commands/queue";
         } else {
-            link = Config.getApiUrl() + "servers/" + Config.getApiKey().get(index) + "/commands/queue";
+            link = Config.getApiUrl() + "servers/" + Config.getSecretKey().get(index) + "/commands/queue";
         }
         URL url = new URL(link);
         urlConnection = (HttpsURLConnection) url.openConnection();
