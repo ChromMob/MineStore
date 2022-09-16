@@ -135,24 +135,31 @@ public final class MineStore extends JavaPlugin {
         MySQLData.setPassword(getConfig().getString("mysql.password"));
         MySQLData.setDatabase(getConfig().getString("mysql.database"));
         Config.setPassword(getConfig().getString("password"));
-        Config.getApiUrl().add(getConfig().getString("store-api"));
+        Config.getApiUrl().add(0, getConfig().getString("store-api"));
         String url = getConfig().getString("store-api");
         for (int i = 1; url != null; i++){
             url = getConfig().getString("store-api-" + i);
             if (url != null) {
-                Config.getApiUrl().add(url);
+                Config.getApiUrl().add(i, url);
             }
         }
-        Config.getApiKey().add(getConfig().getString("api-key"));
+        Config.getApiKey().add(0, getConfig().getString("api-key"));
         String key = getConfig().getString("api-key");
         for (int i = 1; key != null; i++){
             key = getConfig().getString("api-key-" + i);
             if (key != null) {
-                Config.getApiKey().add(key);
+                Config.getApiKey().add(i, key);
             }
         }
         Config.setStoreMessage(getConfig().getString("store-message"));
-        Config.setSecretKey(getConfig().getString("secret-key"));
+        Config.getSecretKey().add(getConfig().getString("secret-key"));
+        String secret = getConfig().getString("secret-key");
+        for (int i = 1; secret != null; i++){
+            secret = getConfig().getString("secret-key-" + i);
+            if (secret != null) {
+                Config.getSecretKey().add(i, secret);
+            }
+        }
         Config.setGuiName(getConfig().getString("settings.name"));
         Config.setPackageMessage(getConfig().getString("settings.message"));
         Config.setBuyUrl(getConfig().getString("settings.api-url"));

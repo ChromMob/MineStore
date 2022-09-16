@@ -30,11 +30,11 @@ public class Config {
 
     @Getter
     @Setter
-    private static ArrayList<String> apiUrl;
+    private static ArrayList<String> apiUrl = new ArrayList<>();
 
     @Getter
     @Setter
-    private static String secretKey;
+    private static ArrayList<String> secretKey = new ArrayList<>();
 
     @Getter
     @Setter
