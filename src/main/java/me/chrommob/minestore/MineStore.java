@@ -7,17 +7,14 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
-import me.chrommob.minestore.commandexecution.Command;
-import me.chrommob.minestore.commands.Buy;
-import me.chrommob.minestore.commands.Reload;
-import me.chrommob.minestore.commands.Store;
+import me.chrommob.minestore.authorization.AuthManager;
+import me.chrommob.minestore.commands.*;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.gui.Event;
 import me.chrommob.minestore.mysql.MySQLData;
 import me.chrommob.minestore.mysql.connection.ConnectionPool;
 import me.chrommob.minestore.mysql.data.UserManager;
 import me.chrommob.minestore.placeholders.PlaceholderHook;
-import me.chrommob.minestore.commands.PunishmentManager;
 import me.chrommob.minestore.commandexecution.JoinQuitListener;
 import me.chrommob.minestore.util.Mode;
 import me.chrommob.minestore.util.Runnable;
@@ -26,9 +23,6 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 
 
 public final class MineStore extends JavaPlugin {
@@ -46,10 +40,12 @@ public final class MineStore extends JavaPlugin {
     public void onEnable() {
         instance = this;
         Metrics metrics = new Metrics(this, 14043);
+        new AuthManager();
         dependencyCheck();
         PluginManager plManager = Bukkit.getPluginManager();
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new Reload());
+        manager.registerCommand(new Verify());
         plManager.registerEvents(new JoinQuitListener(), this);
         plManager.registerEvents(new Event(this), this);
         PunishmentManager.create();
@@ -166,5 +162,9 @@ public final class MineStore extends JavaPlugin {
         Config.setItemName(getConfig().getString("format.item-name"));
         Config.setItemDescription(getConfig().getString("format.item-description"));
         Config.setItemPrice(getConfig().getString("format.item-price"));
+        Config.setAuthMessage(getConfig().getString("auth.message"));
+        Config.setAuthDelay(getConfig().getDouble("auth.time"));
+        Config.setAuthSuccessful("auth.successful");
+        Config.setAuthFailed("auth.failed");
     }
 }

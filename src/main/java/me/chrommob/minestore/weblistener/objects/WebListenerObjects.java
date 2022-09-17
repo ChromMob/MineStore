@@ -6,6 +6,14 @@ import lombok.Getter;
 
 @Getter
 public class WebListenerObjects {
+    @SerializedName("type")
+    @Expose
+    private String type;
+
+    @SerializedName("auth_id")
+    @Expose
+    private String auth_id;
+
     @SerializedName("id")
     @Expose
     private int id;

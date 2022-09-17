@@ -64,3 +64,16 @@ mysql:
   password: ""
   database: "minestore"
 #------------------------------------------------#
+
+#------------------------------------------------#
+# Auth settings                                  #
+auth:
+  # The colour will always be red.               #
+  message: "If you are trying to verify yourself click the message if not contact the admins immediately!"
+  # Auth timeout in seconds                      #
+  time: 5
+  # Successful message                           #
+  successful: "You have been successfully verified."
+  # Failed message                               #
+  failed: "Your time run out or you run the command manually."
+#------------------------------------------------#

@@ -3,6 +3,7 @@ package me.chrommob.minestore.weblistener;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import me.chrommob.minestore.MineStore;
+import me.chrommob.minestore.authorization.AuthManager;
 import me.chrommob.minestore.commandexecution.Command;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.weblistener.objects.WebListenerObjects;
@@ -42,26 +43,31 @@ public class Listener {
                 data = gson.fromJson(line, WebListenerObjects.class);
             }
 
-            if (data.getCommand() == null) {
-                return;
-            }
-            String commandWithoutPrefix = data.getCommand();
-            String[] commandArray = commandWithoutPrefix.split(" ");
-            commandArray[0] = commandArray[0].replaceFirst("/", "");
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(commandArray[0]);
-            if (commandArray.length > 1) {
-                for (String part : commandArray) {
-                    stringBuilder.append(" " + part);
-                }
-            }
-            commandWithoutPrefix = commandWithoutPrefix.replaceFirst("   ", " ");
-            if (Bukkit.getPlayer(data.getUsername()) == null && data.isPlayerOnlineNeeded()) {
-                Command.offline(data.getUsername(), commandWithoutPrefix);
+            if (data.getType().equalsIgnoreCase("authorization")){
+                AuthManager.auth(data.getAuth_id(), data.getUsername(), data.getId(), index);
             } else {
-                Command.online(commandWithoutPrefix);
+
+                if (data.getCommand() == null) {
+                    return;
+                }
+                String commandWithoutPrefix = data.getCommand();
+                String[] commandArray = commandWithoutPrefix.split(" ");
+                commandArray[0] = commandArray[0].replaceFirst("/", "");
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(commandArray[0]);
+                if (commandArray.length > 1) {
+                    for (String part : commandArray) {
+                        stringBuilder.append(" " + part);
+                    }
+                }
+                commandWithoutPrefix = commandWithoutPrefix.replaceFirst("   ", " ");
+                if (Bukkit.getPlayer(data.getUsername()) == null && data.isPlayerOnlineNeeded()) {
+                    Command.offline(data.getUsername(), commandWithoutPrefix);
+                } else {
+                    Command.online(commandWithoutPrefix);
+                }
+                post(data.getId(), index);
             }
-            post(data.getId(), index);
         } catch (Exception e) {
             if (e instanceof ClassCastException) {
                 Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
@@ -78,7 +84,7 @@ public class Listener {
 
     // Posting to the server that the command has been executed
     @SneakyThrows
-    private static void post(int id, int index) {
+    public static void post(int id, int index) {
         Config.getEmpty().set(index, true);
         String link;
         if (Config.getSecretKey().get(index).equalsIgnoreCase("")

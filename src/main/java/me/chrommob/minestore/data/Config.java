@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class Config {
     @Getter
@@ -75,4 +74,20 @@ public class Config {
     @Setter
     @Getter
     private static ArrayList<Boolean> empty = new ArrayList<>();
+
+    @Setter
+    @Getter
+    private static String authMessage;
+
+    @Getter
+    @Setter
+    private static double authDelay;
+
+    @Setter
+    @Getter
+    private static String authSuccessful;
+
+    @Setter
+    @Getter
+    private static String authFailed;
 }
