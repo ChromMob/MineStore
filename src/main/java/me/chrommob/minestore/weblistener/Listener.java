@@ -89,9 +89,9 @@ public class Listener {
         String link;
         if (Config.getSecretKey().get(index).equalsIgnoreCase("")
                 || Config.getSecretKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
-            link = Config.getApiUrl().get(index) + "servers/commands/queue";
+            link = Config.getApiUrl().get(index) + "servers/commands/executed/" + id;
         } else {
-            link = Config.getApiUrl() + "servers/" + Config.getSecretKey().get(index) + "/commands/queue";
+            link = Config.getApiUrl().get(index) + "servers/" + Config.getSecretKey().get(index) + "/commands/executed/" + id;
         }
         URL url = new URL(link);
         urlConnection = (HttpsURLConnection) url.openConnection();
