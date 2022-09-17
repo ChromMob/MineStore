@@ -132,11 +132,13 @@ public final class MineStore extends JavaPlugin {
         MySQLData.setDatabase(getConfig().getString("mysql.database"));
         Config.setPassword(getConfig().getString("password"));
         Config.getApiUrl().add(0, getConfig().getString("store-api"));
+        Config.getEmpty().add(0, false);
         String url = getConfig().getString("store-api");
         for (int i = 1; url != null; i++){
             url = getConfig().getString("store-api-" + i);
             if (url != null) {
                 Config.getApiUrl().add(i, url);
+                Config.getEmpty().add(i, false);
             }
         }
         Config.getApiKey().add(0, getConfig().getString("api-key"));

@@ -10,6 +10,7 @@ import me.chrommob.minestore.weblistener.objects.WebListenerObjects;
 import org.bukkit.Bukkit;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLHandshakeException;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,20 +19,18 @@ import java.net.URL;
 
 public class Listener {
     private static HttpsURLConnection urlConnection;
-
-    @SneakyThrows
     public static void run(int index) {
         String link;
         if (Config.getSecretKey().get(index).equalsIgnoreCase("")
                 || Config.getSecretKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
             link = Config.getApiUrl().get(index) + "servers/commands/queue";
         } else {
-            link = Config.getApiUrl() + "servers/" + Config.getSecretKey().get(index) + "/commands/queue";
+            link = Config.getApiUrl().get(index) + "servers/" + Config.getSecretKey().get(index) + "/commands/queue";
         }
         WebListenerObjects data = new WebListenerObjects();
-        URL url = new URL(link);
         // Listening for commands
         try {
+            URL url = new URL(link);
             urlConnection = (HttpsURLConnection) url.openConnection();
             InputStream in = urlConnection.getInputStream();
 
@@ -42,11 +41,9 @@ public class Listener {
                 Gson gson = new Gson();
                 data = gson.fromJson(line, WebListenerObjects.class);
             }
-
-            if (data.getType().equalsIgnoreCase("authorization")){
+            if (data.getType() != null){
                 AuthManager.auth(data.getAuth_id(), data.getUsername(), data.getId(), index);
             } else {
-
                 if (data.getCommand() == null) {
                     return;
                 }
@@ -71,7 +68,7 @@ public class Listener {
         } catch (Exception e) {
             if (e instanceof ClassCastException) {
                 Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
-            } else if (e instanceof SocketException) {
+            } else if (e instanceof SocketException || e instanceof SSLHandshakeException) {
                 Bukkit.getLogger().info("Please check your internet connection.");
             } else {
                 e.printStackTrace();
@@ -83,26 +80,29 @@ public class Listener {
     }
 
     // Posting to the server that the command has been executed
-    @SneakyThrows
     public static void post(int id, int index) {
-        Config.getEmpty().set(index, true);
-        String link;
-        if (Config.getSecretKey().get(index).equalsIgnoreCase("")
-                || Config.getSecretKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
-            link = Config.getApiUrl().get(index) + "servers/commands/executed/" + id;
-        } else {
-            link = Config.getApiUrl().get(index) + "servers/" + Config.getSecretKey().get(index) + "/commands/executed/" + id;
+        try {
+            Config.getEmpty().set(index, false);
+            String link;
+            if (Config.getSecretKey().get(index).equalsIgnoreCase("")
+                    || Config.getSecretKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
+                link = Config.getApiUrl().get(index) + "servers/commands/executed/" + id;
+            } else {
+                link = Config.getApiUrl().get(index) + "servers/" + Config.getSecretKey().get(index) + "/commands/executed/" + id;
+            }
+            URL url = new URL(link);
+            urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            urlConnection.setDoOutput(true);
+            try (final OutputStream os = urlConnection.getOutputStream()) {
+                // get current time in milliseconds
+                os.write(id);
+            }
+            urlConnection.getInputStream();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        URL url = new URL(link);
-        urlConnection = (HttpsURLConnection) url.openConnection();
-        urlConnection.setRequestMethod("POST");
-        urlConnection.setRequestProperty("Content-Type", "application/json");
-        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
-        urlConnection.setDoOutput(true);
-        try (final OutputStream os = urlConnection.getOutputStream()) {
-            // get current time in milliseconds
-            os.write(id);
-        }
-        urlConnection.getInputStream();
     }
 }
