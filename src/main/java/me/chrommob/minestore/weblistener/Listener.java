@@ -54,7 +54,7 @@ public class Listener {
                 stringBuilder.append(commandArray[0]);
                 if (commandArray.length > 1) {
                     for (String part : commandArray) {
-                        stringBuilder.append(" " + part);
+                        stringBuilder.append(" ").append(part);
                     }
                 }
                 commandWithoutPrefix = commandWithoutPrefix.replaceFirst("   ", " ");
