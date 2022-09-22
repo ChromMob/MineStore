@@ -74,11 +74,11 @@ public class AuthManager {
             HttpsURLConnection urlConnection;
             int index = userHashMap.get(name).getIndex();
             String link;
-            if (Config.getSecretKey().get(index).equalsIgnoreCase("")
-                    || Config.getSecretKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
+            if (Config.getApiKey().get(index).equalsIgnoreCase("")
+                    || Config.getApiKey().get(index).equalsIgnoreCase("hard_api_key_here")) {
                 link = Config.getApiUrl().get(index) + "game_auth/" + state + "?id" + user.getAuth_id();
             } else {
-                link = Config.getApiUrl().get(index) + "game_auth/" + Config.getSecretKey().get(index) + state + "?id" + user.getAuth_id();
+                link = Config.getApiUrl().get(index) + "game_auth/" + Config.getApiKey().get(index) + "/" + state + "?id=" + user.getAuth_id();
             }
             URL url;
             url = new URL(link);
