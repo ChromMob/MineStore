@@ -68,7 +68,6 @@ public class AuthManager {
             HttpsURLConnection urlConnection;
             int index = userHashMap.get(name).getIndex();
             String link;
-               String link;
             if (Config.getSecretKey().get(index).equalsIgnoreCase("")
                     || Config.getSecretKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
                 link = Config.getApiUrl().get(index) + "game_auth/accept?id" + name.getAuth_id();
