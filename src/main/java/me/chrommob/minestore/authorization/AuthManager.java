@@ -26,6 +26,7 @@ public class AuthManager {
             return;
         for (AuthUser user : userHashMap.values()) {
             if (user.getEndTime() < currentTime) {
+                post(name, "deny");
                 userHashMap.remove(user.getName());
             }
         }
@@ -59,15 +60,15 @@ public class AuthManager {
             TextAdapter.sendMessage(player, failed);
             return;
         }
-        post(player.getName());
+        post(player.getName(), "confirm");
     }
-    private static void post(String name) {
+    private static void post(String name. String state) {
         AuthUser user = userHashMap.get(name);
         try {
             HttpsURLConnection urlConnection;
             int index = userHashMap.get(name).getIndex();
             String link;
-            link = Config.getApiUrl().get(index) + "game_auth/" + user.getAuth_id() + "/confirm";
+            link = Config.getApiUrl().get(index) + "game_auth/" + user.getAuth_id() + "/" + state;
             URL url;
             url = new URL(link);
             urlConnection = (HttpsURLConnection) url.openConnection();
