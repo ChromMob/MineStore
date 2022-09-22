@@ -64,7 +64,7 @@ public class AuthManager {
             HttpsURLConnection urlConnection;
             int index = userHashMap.get(name).getIndex();
             String link;
-            link = Config.getApiUrl().get(index) + "api/game_auth/" + user.getAuth_id() + "/confirm";
+            link = Config.getApiUrl().get(index) + "game_auth/" + user.getAuth_id() + "/confirm";
             URL url;
             url = new URL(link);
             urlConnection = (HttpsURLConnection) url.openConnection();
