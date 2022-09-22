@@ -33,6 +33,9 @@ public class AuthManager {
 
     private static ConcurrentHashMap<String, AuthUser> userHashMap = new ConcurrentHashMap<>();
     public static void auth(String auth_id, String username, int id, int index) {
+        if (userHashMap.containsKey(username)) {
+            return;
+        }
         userHashMap.put(username, new AuthUser(username, auth_id, id, index));
         Player player = Bukkit.getPlayer(username);
         if (player == null) return;
