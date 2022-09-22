@@ -52,7 +52,6 @@ public class AuthManager {
         Player player = Bukkit.getPlayer(username);
         if (player == null) return;
         if (!userHashMap.containsKey(username)) {
-            player.sendMessage(Config.getAuthFailed());
             TextComponent failed = TextComponent.builder()
                     .content(Config.getAuthFailed())
                     .color(TextColor.RED)
