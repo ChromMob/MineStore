@@ -38,6 +38,13 @@ public class AuthManager {
             return;
         }
         userHashMap.put(username, new AuthUser(username, auth_id, id, index));
+        sendAuthMessage(username);
+    }
+
+    public static void sendAuthMessage(String username) {
+        if (!userHashMap.containsKey(username)) {
+            return;
+        }
         Player player = Bukkit.getPlayer(username);
         if (player == null) return;
         TextComponent textComponent = TextComponent.builder()

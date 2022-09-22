@@ -1,6 +1,7 @@
 package me.chrommob.minestore.commandexecution;
 
 import me.chrommob.minestore.MineStore;
+import me.chrommob.minestore.authorization.AuthManager;
 import me.chrommob.minestore.commands.PunishmentManager;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.mysql.MySQLData;
@@ -19,6 +20,7 @@ import static me.chrommob.minestore.commandexecution.Command.runLater;
 public class JoinQuitListener implements Listener {
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
+        AuthManager.sendAuthMessage(event.getPlayer().getName());
         try {
             String name = event.getPlayer().getName();
             if (runLater.get(name).isEmpty()) {
