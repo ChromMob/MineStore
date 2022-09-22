@@ -26,7 +26,7 @@ public class AuthManager {
             return;
         for (AuthUser user : userHashMap.values()) {
             if (user.getEndTime() < currentTime) {
-                post(name, "deny");
+                post(user.getName(), "deny");
                 userHashMap.remove(user.getName());
             }
         }
@@ -62,7 +62,7 @@ public class AuthManager {
         }
         post(player.getName(), "confirm");
     }
-    private static void post(String name. String state) {
+    private static void post(String name, String state) {
         AuthUser user = userHashMap.get(name);
         try {
             HttpsURLConnection urlConnection;
@@ -70,9 +70,9 @@ public class AuthManager {
             String link;
             if (Config.getSecretKey().get(index).equalsIgnoreCase("")
                     || Config.getSecretKey().get(index).equalsIgnoreCase("hard_secret_key_here")) {
-                link = Config.getApiUrl().get(index) + "game_auth/accept?id" + name.getAuth_id();
+                link = Config.getApiUrl().get(index) + "game_auth/" + state + "?id" + user.getAuth_id();
             } else {
-                link = Config.getApiUrl().get(index) + "game_auth/" + Config.getSecretKey().get(index) + "game_auth/accept?id" + name.getAuth_id();
+                link = Config.getApiUrl().get(index) + "game_auth/" + Config.getSecretKey().get(index) + state + "?id" + user.getAuth_id();
             }
             URL url;
             url = new URL(link);
