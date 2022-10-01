@@ -34,9 +34,6 @@ public class AuthManager {
 
     private static ConcurrentHashMap<String, AuthUser> userHashMap = new ConcurrentHashMap<>();
     public static void auth(String auth_id, String username, int id, int index) {
-        if (userHashMap.containsKey(username)) {
-            return;
-        }
         userHashMap.put(username, new AuthUser(username, auth_id, id, index));
         sendAuthMessage(username);
     }
@@ -74,12 +71,7 @@ public class AuthManager {
             HttpsURLConnection urlConnection;
             int index = userHashMap.get(name).getIndex();
             String link;
-            if (Config.getApiKey().get(index).equalsIgnoreCase("")
-                    || Config.getApiKey().get(index).equalsIgnoreCase("hard_api_key_here")) {
-                link = Config.getApiUrl().get(index) + "game_auth/" + state + "?id" + user.getAuth_id();
-            } else {
-                link = Config.getApiUrl().get(index) + "game_auth/" + Config.getApiKey().get(index) + "/" + state + "?id=" + user.getAuth_id();
-            }
+            link = Config.getApiUrl().get(index) + "game_auth/" + state + "/" + user.getAuth_id();
             URL url;
             url = new URL(link);
             urlConnection = (HttpsURLConnection) url.openConnection();
