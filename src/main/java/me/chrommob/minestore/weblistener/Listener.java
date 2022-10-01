@@ -63,8 +63,8 @@ public class Listener {
                 } else {
                     Command.online(commandWithoutPrefix);
                 }
-                post(data.getId(), index);
             }
+            post(data.getId(), index);
         } catch (Exception e) {
             if (e instanceof ClassCastException) {
                 Bukkit.getLogger().info("Please use HTTPS instead of HTTP.");
