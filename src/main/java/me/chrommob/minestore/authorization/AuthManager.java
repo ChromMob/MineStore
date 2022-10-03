@@ -6,12 +6,12 @@ import net.kyori.text.TextComponent;
 import net.kyori.text.adapter.bukkit.TextAdapter;
 import net.kyori.text.event.ClickEvent;
 import net.kyori.text.format.TextColor;
+import net.kyori.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,7 +32,7 @@ public class AuthManager {
         }
     }
 
-    private static ConcurrentHashMap<String, AuthUser> userHashMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, AuthUser> userHashMap = new ConcurrentHashMap<>();
     public static void auth(String auth_id, String username, int id, int index) {
         userHashMap.put(username, new AuthUser(username, auth_id, id, index));
         sendAuthMessage(username);
@@ -64,6 +64,12 @@ public class AuthManager {
             return;
         }
         post(player.getName(), "confirm");
+        TextComponent textComponent = TextComponent.builder()
+                .content(Config.getAuthSuccessful())
+                .color(TextColor.GREEN)
+                .decoration(TextDecoration.BOLD, true)
+                .build();
+        TextAdapter.sendMessage(player, textComponent);
     }
     private static void post(String name, String state) {
         AuthUser user = userHashMap.get(name);
