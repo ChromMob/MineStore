@@ -26,7 +26,7 @@ public class AuthManager {
             return;
         for (AuthUser user : userHashMap.values()) {
             if (user.getEndTime() < currentTime) {
-                post(user.getName(), "deny");
+                //post(user.getName(), "deny");
                 userHashMap.remove(user.getName());
             }
         }
