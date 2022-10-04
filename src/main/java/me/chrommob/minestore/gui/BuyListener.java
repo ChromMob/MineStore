@@ -19,7 +19,13 @@ public class BuyListener {
     private static HttpsURLConnection urlConnection;
     @SneakyThrows
     public static void run() {
-        String link = Config.getBuyUrl();
+        String link;
+        if (Config.getSecretKey().get(0).equalsIgnoreCase("")
+                || Config.getSecretKey().get(0).equalsIgnoreCase("hard_api_key_here")) {
+            link = Config.getApiUrl().get(0) +  "gui/packages_new";
+        } else {
+            link = Config.getApiUrl().get(0) + Config.getSecretKey().get(0) + "/gui/packages_new";
+        }
         URL url = new URL(link);
         try {
             urlConnection = (HttpsURLConnection) url.openConnection();

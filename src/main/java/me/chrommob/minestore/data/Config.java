@@ -45,10 +45,6 @@ public class Config {
 
     @Getter
     @Setter
-    private static String buyUrl;
-
-    @Getter
-    @Setter
     private static String itemName;
 
     @Getter
