@@ -24,6 +24,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 
 public final class MineStore extends JavaPlugin {
     @Getter
@@ -33,7 +35,16 @@ public final class MineStore extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        saveDefaultConfig();
+        boolean configExists = new File(getDataFolder(), "config.yml").exists();
+        if (!configExists) {
+            getLogger().info("Config.yml not found, creating!");
+            saveDefaultConfig();
+            getLogger().info("Config.yml created!");
+            getLogger().info("Disabling plugin so you can configure it!");
+            Bukkit.getPluginManager().disablePlugin(this);
+        } else {
+            getLogger().info("Config.yml found, loading!");
+        }
     }
 
     @Override
