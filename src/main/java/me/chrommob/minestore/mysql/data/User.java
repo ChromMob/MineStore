@@ -23,6 +23,9 @@ public class User {
     private static Chat chat;
 
     public void update() {
+        if (economy == null || chat == null) {
+            return;
+        }
         try {
             this.prefix = chat.getPlayerPrefix(Bukkit.getPlayer(uuid));
             this.suffix = chat.getPlayerSuffix(Bukkit.getPlayer(uuid));
