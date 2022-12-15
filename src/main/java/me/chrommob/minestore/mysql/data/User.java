@@ -23,10 +23,6 @@ public class User {
     private static Chat chat;
 
     public void update() {
-        RegisteredServiceProvider<Economy> esp = MineStore.instance.getServer().getServicesManager().getRegistration(Economy.class);
-        RegisteredServiceProvider<Chat> csp = MineStore.instance.getServer().getServicesManager().getRegistration(Chat.class);
-        economy = esp.getProvider();
-        chat = csp.getProvider();
         try {
             this.prefix = chat.getPlayerPrefix(Bukkit.getPlayer(uuid));
             this.suffix = chat.getPlayerSuffix(Bukkit.getPlayer(uuid));
@@ -40,15 +36,33 @@ public class User {
     public User(UUID uuid, String name) {
         RegisteredServiceProvider<Economy> esp = MineStore.instance.getServer().getServicesManager().getRegistration(Economy.class);
         RegisteredServiceProvider<Chat> csp = MineStore.instance.getServer().getServicesManager().getRegistration(Chat.class);
-        economy = esp.getProvider();
-        chat = csp.getProvider();
+        if (esp != null) {
+            economy = esp.getProvider();
+        } else {
+            economy = null;
+        }
+        if (csp != null) {
+            chat = csp.getProvider();
+        } else {
+            chat = null;
+        }
         this.uuid = uuid;
         this.name = name;
         try {
-            this.prefix = chat.getPlayerPrefix(Bukkit.getPlayer(uuid));
-            this.suffix = chat.getPlayerSuffix(Bukkit.getPlayer(uuid));
-            this.balance = economy.getBalance(Bukkit.getPlayer(uuid));
-            this.group_name = chat.getPrimaryGroup(Bukkit.getPlayer(uuid));
+            if (chat != null) {
+                this.prefix = chat.getPlayerPrefix(Bukkit.getPlayer(uuid));
+                this.suffix = chat.getPlayerSuffix(Bukkit.getPlayer(uuid));
+                this.group_name = chat.getPrimaryGroup(Bukkit.getPlayer(uuid));
+            } else {
+                this.prefix = "";
+                this.suffix = "";
+                this.group_name = "";
+            }
+            if (economy != null) {
+                this.balance = economy.getBalance(Bukkit.getPlayer(uuid));
+            } else {
+                this.balance = 0;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
