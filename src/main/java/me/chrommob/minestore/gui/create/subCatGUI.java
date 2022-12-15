@@ -26,8 +26,13 @@ public class subCatGUI {
             if (GuiData.getData().get(i).getName().equalsIgnoreCase(catName)) {
                 for (int j = 0; j < GuiData.getData().get(i).getSubcategories().size(); j++) {
                     Material material = Material.CHEST;
-                    if (Material.matchMaterial(GuiData.getData().get(i).getSubcategories().get(j).getGui_item_id().replaceFirst("minecraft:", "")) != null) {
-                        material = Material.matchMaterial(GuiData.getData().get(i).getSubcategories().get(j).getGui_item_id().replaceFirst("minecraft:", ""));
+                    if (GuiData.getData().get(i).getSubcategories().get(j).getGui_item_id() != null) {
+                        String materialName = GuiData.getData().get(i).getSubcategories().get(j).getGui_item_id();
+                        String[] materialData = materialName.split(":");
+                        material = Material.matchMaterial(materialData[0]);
+                        if (material == null) {
+                            Bukkit.getLogger().info("[MineStore] Error: Material " + GuiData.getData().get(i).getGui_item_id() + " not found!");
+                        }
                     }
                     ItemStack item = new ItemStack(material);
                     ItemMeta meta = item.getItemMeta();

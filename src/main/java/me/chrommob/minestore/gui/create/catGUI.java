@@ -25,11 +25,14 @@ public class catGUI {
 
         GUI = Bukkit.createInventory(null, 54, ChatColor.translateAlternateColorCodes('&', Config.getGuiName()));
         for (int i = 0; i < GuiData.getData().size(); i++) {
-            Material material= Material.CHEST;;
-            if (Material.matchMaterial(GuiData.getData().get(i).getGui_item_id().replaceFirst("minecraft:", ""))!= null) {
-                material = Material.matchMaterial(GuiData.getData().get(i).getGui_item_id().replaceFirst("minecraft:", ""));
-            } else {
-                Bukkit.getLogger().info("[MineStore] Error: Material " + GuiData.getData().get(i).getGui_item_id() + " not found!");
+            Material material = Material.CHEST;
+            if (GuiData.getData().get(i).getGui_item_id() != null) {
+                String materialName = GuiData.getData().get(i).getGui_item_id();
+                String[] materialData = materialName.split(":");
+                material = Material.matchMaterial(materialData[0]);
+                if (material == null) {
+                    Bukkit.getLogger().info("[MineStore] Error: Material " + GuiData.getData().get(i).getGui_item_id() + " not found!");
+                }
             }
             ItemStack item = new ItemStack(material, 1);
             ItemMeta meta = item.getItemMeta();

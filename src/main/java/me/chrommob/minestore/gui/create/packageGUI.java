@@ -50,10 +50,13 @@ public class packageGUI {
             for (Map.Entry<Integer, Integer> entry : sortedMap.entrySet()) {
                 PackagesType data = GuiData.getData().get(i).getPackages().get(entry.getKey());
                 Material material = Material.CHEST;
-                if (Material.matchMaterial(data.getItem_id().replaceFirst("minecraft:", "")) != null) {
-                    material = Material.matchMaterial(data.getItem_id().replaceFirst("minecraft:", ""));
-                } else {
-                    Bukkit.getLogger().info("[MineStore] Invalid Material ID: " + data.getItem_id());
+                if (data.getItem_id() != null) {
+                    String materialName = data.getItem_id();
+                    String[] materialData = materialName.split(":");
+                    material = Material.matchMaterial(materialData[0]);
+                    if (material == null) {
+                        Bukkit.getLogger().info("[MineStore] Error: Material " + GuiData.getData().get(i).getGui_item_id() + " not found!");
+                    }
                 }
                 ItemStack item = new ItemStack(material);
                 if (entry.getValue() == -10) {
