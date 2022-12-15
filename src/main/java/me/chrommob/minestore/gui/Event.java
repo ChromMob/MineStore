@@ -5,15 +5,11 @@ import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.data.GuiData;
 import me.chrommob.minestore.gui.create.packageGUI;
 import me.chrommob.minestore.gui.create.subCatGUI;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Event implements Listener {
     private final MineStore plugin;
@@ -45,7 +41,15 @@ public class Event implements Listener {
             }
             for (int i = 0; i < GuiData.getData().size(); i++) {
                 for (int j = 0; j < GuiData.getData().get(i).getPackages().size(); j++) {
-                    if (GuiData.getData().get(i).getPackages().get(j).getCategory_url().equals(item)) {
+                    if (GuiData.getData().get(i).getPackages().get(j).getCategory_url().equalsIgnoreCase(item)) {
+                        plugin.getLogger().info("Opening packageGUI for " + GuiData.getData().get(i).getPackages().get(j).getName());
+                        Player player = (Player) event.getWhoClicked();
+                        packageGUI gui = new packageGUI(plugin, item);
+                        gui.openGUI(player);
+                        return;
+                    }
+                    if (GuiData.getData().get(i).getPackages().get(j).getName().equalsIgnoreCase(item) && (GuiData.getSubcategory().containsValue(item) || GuiData.getSubcategory().containsKey(item)) || GuiData.getData().get(i).getName().equalsIgnoreCase(item)) {
+                        plugin.getLogger().info("Opening packageGUI for " + GuiData.getData().get(i).getPackages().get(j).getName());
                         Player player = (Player) event.getWhoClicked();
                         packageGUI gui = new packageGUI(plugin, item);
                         gui.openGUI(player);
