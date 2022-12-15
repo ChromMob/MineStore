@@ -52,8 +52,14 @@ public class packageGUI {
                 Material material = Material.CHEST;
                 if (data.getItem_id() != null) {
                     String materialName = data.getItem_id();
-                    String[] materialData = materialName.split(":");
-                    material = Material.matchMaterial(materialData[0]);
+                    String[] materialData = new String[2];
+                    if (materialName.contains(":")) {
+                        materialData = materialName.split(":");
+                    } else {
+                        materialData[0] = "0";
+                        materialData[1] = materialName;
+                    }
+                    material = Material.matchMaterial(materialData[1]);
                     if (material == null) {
                         Bukkit.getLogger().info("[MineStore] Error: Material " + GuiData.getData().get(i).getGui_item_id() + " not found!");
                     }
