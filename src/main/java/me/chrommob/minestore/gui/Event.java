@@ -25,12 +25,10 @@ public class Event implements Listener {
             }
             event.setCancelled(true);
             String item;
-            try {
-                item = ChatColor.stripColor(event.getInventory().getItem(event.getSlot()).getItemMeta().getDisplayName());
-                item = item.toLowerCase();
-            } catch (NullPointerException ignored) {
+            if (event.getInventory().getItem(event.getSlot()).getItemMeta().getDisplayName() == null) {
                 return;
             }
+            item = ChatColor.stripColor(event.getInventory().getItem(event.getSlot()).getItemMeta().getDisplayName().toLowerCase());
             if (GuiData.getSubcategory().get(item) != null) {
                 if (!GuiData.getSubcategory().get(item).isEmpty()) {
                     Player player = (Player) event.getWhoClicked();
