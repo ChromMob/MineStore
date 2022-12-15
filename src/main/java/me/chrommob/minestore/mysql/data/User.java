@@ -19,8 +19,8 @@ public class User {
     private String suffix;
     private double balance;
     private String group_name;
-    private static Economy economy;
-    private static Chat chat;
+    private static Economy economy = null;
+    private static Chat chat = null;
 
     public void update() {
         if (economy == null || chat == null) {
@@ -41,13 +41,9 @@ public class User {
         RegisteredServiceProvider<Chat> csp = MineStore.instance.getServer().getServicesManager().getRegistration(Chat.class);
         if (esp != null) {
             economy = esp.getProvider();
-        } else {
-            economy = null;
         }
         if (csp != null) {
             chat = csp.getProvider();
-        } else {
-            chat = null;
         }
         this.uuid = uuid;
         this.name = name;
