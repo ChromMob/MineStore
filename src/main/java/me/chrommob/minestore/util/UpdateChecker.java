@@ -73,7 +73,7 @@ public class UpdateChecker {
         try {
             URL downloadUrl = new URL(downloadLink);
             InputStream inputStream = new BufferedInputStream(downloadUrl.openStream());
-            Path path = Paths.get("plugins/MineStore.jar");
+            Path path = Paths.get("plugins/MineStore.zip");
             FileOutputStream outputStream = new FileOutputStream(path.toFile());
 
             byte[] buffer = new byte[4096];
