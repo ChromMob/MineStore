@@ -53,7 +53,8 @@ public class UpdateChecker {
 
             Gson gson = new Gson();
             JsonObject root = gson.fromJson(String.valueOf(response), JsonObject.class);
-            return root.get("artifacts").getAsJsonArray().get(0).getAsJsonObject().get("archive_download_url").getAsString();
+            int actionId = root.get("artifacts").getAsJsonArray().get(root.get("artifacts").getAsJsonArray().size() - 1).getAsJsonObject().get("id").getAsInt();
+            return "https://nightly.link/" + repository + "/actions/runs/" + actionId;
         } catch (IOException e) {
             // Handle error
         }
