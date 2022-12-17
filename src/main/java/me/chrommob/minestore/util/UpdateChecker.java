@@ -52,13 +52,8 @@ public class UpdateChecker {
             in.close();
 
             Gson gson = new Gson();
-            JsonArray root = gson.fromJson(String.valueOf(response), JsonArray.class);
-            JsonArray object = root.get(1).getAsJsonArray();
-            // Get the first commit in the list (which should be the latest commit)
-            JsonObject latestAction = root.get(0).getAsJsonObject();
-
-            // Extract the commit information from the JSON object
-            return latestAction.get("archive_download_url").getAsString();
+            JsonObject root = gson.fromJson(String.valueOf(response), JsonObject.class);
+            return root.get("artifacts").getAsJsonArray().get(0).getAsJsonObject().get("archive_download_url").getAsString();
         } catch (IOException e) {
             // Handle error
         }
@@ -72,7 +67,11 @@ public class UpdateChecker {
     private void downloadUpdate() {
         try {
             URL downloadUrl = new URL(downloadLink);
-            InputStream inputStream = new BufferedInputStream(downloadUrl.openStream());
+            HttpURLConnection connection = (HttpURLConnection) downloadUrl.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
+            connection.setRequestProperty("Authorization", "token $SOME_TOKEN_WITHOUT_PERMISSIONS");
+            InputStream inputStream = new BufferedInputStream(connection.getInputStream());
             Path path = Paths.get("plugins/MineStore.zip");
             FileOutputStream outputStream = new FileOutputStream(path.toFile());
 
