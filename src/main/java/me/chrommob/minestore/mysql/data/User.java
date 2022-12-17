@@ -23,14 +23,21 @@ public class User {
     private static Chat chat = null;
 
     public void update() {
-        if (economy == null || chat == null) {
-            return;
-        }
         try {
-            this.prefix = chat.getPlayerPrefix(Bukkit.getPlayer(uuid));
-            this.suffix = chat.getPlayerSuffix(Bukkit.getPlayer(uuid));
-            this.balance = economy.getBalance(Bukkit.getPlayer(uuid));
-            this.group_name = chat.getPrimaryGroup(Bukkit.getPlayer(uuid));
+            if (chat != null) {
+                this.prefix = chat.getPlayerPrefix(Bukkit.getPlayer(uuid));
+                this.suffix = chat.getPlayerSuffix(Bukkit.getPlayer(uuid));
+                this.group_name = chat.getPrimaryGroup(Bukkit.getPlayer(uuid));
+            } else {
+                this.prefix = "";
+                this.suffix = "";
+                this.group_name = "";
+            }
+            if (economy != null) {
+                this.balance = economy.getBalance(Bukkit.getPlayer(uuid));
+            } else {
+                this.balance = 0;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
