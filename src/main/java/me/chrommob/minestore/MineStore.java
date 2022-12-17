@@ -18,6 +18,7 @@ import me.chrommob.minestore.placeholders.PlaceholderHook;
 import me.chrommob.minestore.commandexecution.JoinQuitListener;
 import me.chrommob.minestore.util.Mode;
 import me.chrommob.minestore.util.Runnable;
+import me.chrommob.minestore.util.UpdateChecker;
 import me.chrommob.minestore.websocket.Socket;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -50,6 +51,7 @@ public final class MineStore extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        new UpdateChecker();
         Metrics metrics = new Metrics(this, 14043);
         new AuthManager();
         dependencyCheck();
