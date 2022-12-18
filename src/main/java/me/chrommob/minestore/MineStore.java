@@ -36,12 +36,14 @@ public final class MineStore extends JavaPlugin {
     Mode mode = Mode.WEBSOCKET;
 
     @Override
+    public void onLoad() {
+        instance = this;
+        new UpdateChecker();
+    }
+
+    @Override
     public void onEnable() {
         instance = this;
-        UpdateChecker updateChecker = new UpdateChecker();
-        while (true) {
-            if (!updateChecker.isRunning()) break;
-        }
         if (!isEnabled()) {
             return;
         }
