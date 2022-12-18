@@ -18,9 +18,10 @@ import me.chrommob.minestore.placeholders.PlaceholderHook;
 import me.chrommob.minestore.commandexecution.JoinQuitListener;
 import me.chrommob.minestore.util.Mode;
 import me.chrommob.minestore.util.Runnable;
-import me.chrommob.minestore.util.UpdateChecker;
+import me.chrommob.minestore.updater.UpdateChecker;
 import me.chrommob.minestore.websocket.Socket;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,9 +36,15 @@ public final class MineStore extends JavaPlugin {
     Mode mode = Mode.WEBSOCKET;
 
     @Override
-    public void onLoad() {
+    public void onEnable() {
         instance = this;
-        new UpdateChecker();
+        UpdateChecker updateChecker = new UpdateChecker();
+        while (true) {
+            if (!updateChecker.isRunning()) break;
+        }
+        if (!isEnabled()) {
+            return;
+        }
         boolean configExists = new File(getDataFolder(), "config.yml").exists();
         if (!configExists) {
             getLogger().info("Config.yml not found, creating!");
@@ -48,12 +55,10 @@ public final class MineStore extends JavaPlugin {
         } else {
             getLogger().info("Config.yml found, loading!");
         }
-    }
-
-    @Override
-    public void onEnable() {
         Metrics metrics = new Metrics(this, 14043);
-        new AuthManager();
+        metrics.addCustomChart(new SimplePie("mode", () -> mode.toString()));
+        metrics.addCustomChart(new SimplePie("mysql", () -> MySQLData.isEnabled() ? "true" : "false"));
+        //new AuthManager();
         dependencyCheck();
         PluginManager plManager = Bukkit.getPluginManager();
         PaperCommandManager manager = new PaperCommandManager(this);
