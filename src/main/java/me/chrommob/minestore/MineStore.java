@@ -7,6 +7,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
+import me.chrommob.minestore.authorization.AuthManager;
 import me.chrommob.minestore.commands.*;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.gui.Event;
@@ -58,7 +59,7 @@ public final class MineStore extends JavaPlugin {
         Metrics metrics = new Metrics(this, 14043);
         metrics.addCustomChart(new SimplePie("mode", () -> mode.toString()));
         metrics.addCustomChart(new SimplePie("mysql", () -> MySQLData.isEnabled() ? "true" : "false"));
-        //new AuthManager();
+        new AuthManager();
         dependencyCheck();
         PluginManager plManager = Bukkit.getPluginManager();
         PaperCommandManager manager = new PaperCommandManager(this);
