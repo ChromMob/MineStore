@@ -47,23 +47,24 @@ public final class MineStore extends JavaPlugin {
             getLogger().info("Disabling plugin so you can configure it!");
             Bukkit.getPluginManager().disablePlugin(this);
         }
-        loadConfig();
-        new UpdateChecker(getConfig().getBoolean("auto-update"));
     }
 
     @Override
     public void onEnable() {
+        instance = this;
+        loadConfig();
+        new UpdateChecker(getConfig().getBoolean("auto-update"));
         if (!isEnabled()) {
             return;
         }
         Metrics metrics = new Metrics(this, 14043);
         metrics.addCustomChart(new SimplePie("mode", () -> mode.toString()));
         metrics.addCustomChart(new SimplePie("mysql", () -> MySQLData.isEnabled() ? "true" : "false"));
-        new AuthManager();
+        //new AuthManager();
         dependencyCheck();
         PluginManager plManager = Bukkit.getPluginManager();
         PaperCommandManager manager = new PaperCommandManager(this);
-        manager.registerCommand(new Reload());
+        manager.registerCommand(new BaseCommands());
         manager.registerCommand(new Verify());
         plManager.registerEvents(new JoinQuitListener(), this);
         plManager.registerEvents(new Event(this), this);
