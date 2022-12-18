@@ -36,6 +36,8 @@ public final class MineStore extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        instance = this;
+        new UpdateChecker();
         boolean configExists = new File(getDataFolder(), "config.yml").exists();
         if (!configExists) {
             getLogger().info("Config.yml not found, creating!");
@@ -50,8 +52,6 @@ public final class MineStore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance = this;
-        new UpdateChecker();
         Metrics metrics = new Metrics(this, 14043);
         new AuthManager();
         dependencyCheck();
