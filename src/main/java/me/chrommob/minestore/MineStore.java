@@ -39,9 +39,7 @@ public final class MineStore extends JavaPlugin {
     public void onLoad() {
         instance = this;
         loadConfig();
-        if (getConfig().getBoolean("auto-update")) {
-            new UpdateChecker();
-        }
+        new UpdateChecker(getConfig().getBoolean("auto-update"));
     }
 
     @Override

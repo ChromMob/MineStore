@@ -20,7 +20,7 @@ public class UpdateChecker {
     private final File zipFile = new File(temp, "MineStore.zip");
     private final File pluginFile = new File(temp, "MineStore.jar");
 
-    public UpdateChecker() {
+    public UpdateChecker(boolean isAutoUpdate) {
         if (!temp.exists()) {
             if (temp.mkdirs()) {
                 MineStore.instance.getLogger().info("Created temp directory.");
@@ -48,6 +48,11 @@ public class UpdateChecker {
         }
         if (isUpdateAvailable()) {
             downloadLink = "https://nightly.link/ChromMob/MineStore/workflows/maven/main/artifact.zip";
+            MineStore.instance.getLogger().info("New update available: " + newVersion);
+            if (!isAutoUpdate) {
+                MineStore.instance.getLogger().info("Download link: " + downloadLink);
+                return;
+            }
             if (downloadUpdate()) {
                 MineStore.instance.getLogger().info("Update downloaded successfully.");
                 if (unzipFile()) {
