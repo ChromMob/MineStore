@@ -8,7 +8,7 @@ import org.bukkit.plugin.InvalidPluginException;
 import java.io.File;
 
 public class UpdateLoader implements Runnable {
-    private final File pluginFile = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore", "MineStore.jar");
+    private final File pluginFile = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore" + File.separator + "temp", "MineStore.jar");
 
     public UpdateLoader() {
         this.run();

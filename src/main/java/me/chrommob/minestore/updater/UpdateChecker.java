@@ -15,22 +15,17 @@ public class UpdateChecker {
     private final String currentVersion;
     private final String newVersion;
     private String downloadLink;
-    private final File zipFile = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore", "MineStore.zip");
-    private final File pluginFile = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore", "MineStore.jar");
+
+    private final File temp = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore" + File.separator + "temp");
+    private final File zipFile = new File(temp, "MineStore.zip");
+    private final File pluginFile = new File(temp, "MineStore.jar");
 
     public UpdateChecker() {
-        if (zipFile.exists()) {
-            if (zipFile.delete()) {
-                MineStore.instance.getLogger().info("Deleted old zip file!");
+        if (temp.exists()) {
+            if (temp.delete()) {
+                MineStore.instance.getLogger().info("Deleted old temp folder.");
             } else {
-                MineStore.instance.getLogger().info("Failed to delete old zip file!");
-            }
-        }
-        if (pluginFile.exists()) {
-            if (pluginFile.delete()) {
-                MineStore.instance.getLogger().info("Deleted old plugin file!");
-            } else {
-                MineStore.instance.getLogger().info("Failed to delete old plugin file!");
+                MineStore.instance.getLogger().info("Failed to delete old temp folder.");
             }
         }
         this.currentVersion = getCurrentVersion();

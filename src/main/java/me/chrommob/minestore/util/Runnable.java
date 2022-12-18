@@ -25,7 +25,7 @@ public class Runnable {
         executor.scheduleAtFixedRate(() -> {
             if (load.equalsIgnoreCase("web")) {
                 for (int i = 0; i < Config.getApiUrl().size(); i++) {
-                    if (Config.getEmpty().get(i) == true) {
+                    if (Config.getEmpty().get(i)) {
                         Listener.run(i);
                     }
                 }
@@ -47,7 +47,7 @@ public class Runnable {
         executor.scheduleAtFixedRate(() -> {
             if (load.equalsIgnoreCase("web")) {
                 for (int i = 0; i < Config.getApiUrl().size(); i++) {
-                    if (Config.getEmpty().get(i) == false) {
+                    if (!Config.getEmpty().get(i)) {
                         Listener.run(i);
                     }
                 }
