@@ -13,6 +13,13 @@
 #               PERMISSIONS                         #
 # Buy - ms.buy                                    #
 # Store - ms.store                               #
+#-----------------------------------------------------#
+
+#-----------------------------------------------------#
+# Do you want to enable the plugin auto-update?       #
+auto-update: true
+#-----------------------------------------------------#
+
 #------------------------------------------------#
 # Modes: websocket or web-listener.              #
 # Websocket requires opened port.                #
