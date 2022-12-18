@@ -4,9 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.chrommob.minestore.MineStore;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.InvalidDescriptionException;
-import org.bukkit.plugin.InvalidPluginException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -20,7 +17,6 @@ public class UpdateChecker {
     private String downloadLink;
     private final File zipFile = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore", "MineStore.zip");
     private final File pluginFile = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore", "MineStore.jar");
-    private boolean isRunning = true;
 
     public UpdateChecker() {
         if (zipFile.exists()) {
@@ -48,8 +44,12 @@ public class UpdateChecker {
             if (downloadUpdate()) {
                 MineStore.instance.getLogger().info("Update downloaded successfully.");
                 if (unzipFile()) {
+                    if (!isWindows() && replaceFile()) {
+                        MineStore.instance.getLogger().info("File replaced successfully. So it will not be needed to be redownloaded on restart.");
+                    } else {
+                        MineStore.instance.getLogger().info("File not replaced. You are on Windows or the file is not found.");
+                    }
                     new UpdateLoader();
-                    isRunning = false;
                 } else {
                     MineStore.instance.getLogger().warning("Failed to load update.");
                     MineStore.instance.getServer().shutdown();
@@ -62,8 +62,12 @@ public class UpdateChecker {
         }
     }
 
-    public boolean isRunning() {
-        return isRunning;
+    private boolean replaceFile() {
+        return pluginFile.renameTo(new File(MineStore.instance.getDataFolder().getParentFile(), "MineStore.jar"));
+    }
+
+    private boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
     }
 
     private boolean unzipFile() {
