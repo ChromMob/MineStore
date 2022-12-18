@@ -38,15 +38,14 @@ public final class MineStore extends JavaPlugin {
     @Override
     public void onLoad() {
         instance = this;
-        boolean configExists = new File(getDataFolder(), "config.yml").exists();
-        if (!configExists) {
+        if (new File(getDataFolder(), "config.yml").exists()) {
+            getLogger().info("Config.yml found, loading!");
+        } else {
             getLogger().info("Config.yml not found, creating!");
             saveDefaultConfig();
             getLogger().info("Config.yml created!");
             getLogger().info("Disabling plugin so you can configure it!");
             Bukkit.getPluginManager().disablePlugin(this);
-        } else {
-            getLogger().info("Config.yml found, loading!");
         }
         loadConfig();
         new UpdateChecker(getConfig().getBoolean("auto-update"));
