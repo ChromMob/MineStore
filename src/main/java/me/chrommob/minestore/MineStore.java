@@ -38,15 +38,6 @@ public final class MineStore extends JavaPlugin {
     @Override
     public void onLoad() {
         instance = this;
-        loadConfig();
-        new UpdateChecker(getConfig().getBoolean("auto-update"));
-    }
-
-    @Override
-    public void onEnable() {
-        if (!isEnabled()) {
-            return;
-        }
         boolean configExists = new File(getDataFolder(), "config.yml").exists();
         if (!configExists) {
             getLogger().info("Config.yml not found, creating!");
@@ -56,6 +47,15 @@ public final class MineStore extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
             getLogger().info("Config.yml found, loading!");
+        }
+        loadConfig();
+        new UpdateChecker(getConfig().getBoolean("auto-update"));
+    }
+
+    @Override
+    public void onEnable() {
+        if (!isEnabled()) {
+            return;
         }
         Metrics metrics = new Metrics(this, 14043);
         metrics.addCustomChart(new SimplePie("mode", () -> mode.toString()));
