@@ -21,11 +21,23 @@ public class UpdateChecker {
     private final File pluginFile = new File(temp, "MineStore.jar");
 
     public UpdateChecker() {
-        if (temp.exists()) {
-            if (temp.delete()) {
-                MineStore.instance.getLogger().info("Deleted old temp folder.");
+        if (!temp.exists()) {
+            if (temp.mkdirs()) {
+                MineStore.instance.getLogger().info("Created temp directory.");
+            }
+        }
+        if (zipFile.exists()) {
+            if (zipFile.delete()) {
+                MineStore.instance.getLogger().info("Deleted old zip file!");
             } else {
-                MineStore.instance.getLogger().info("Failed to delete old temp folder.");
+                MineStore.instance.getLogger().info("Failed to delete old zip file!");
+            }
+        }
+        if (pluginFile.exists()) {
+            if (pluginFile.delete()) {
+                MineStore.instance.getLogger().info("Deleted old plugin file!");
+            } else {
+                MineStore.instance.getLogger().info("Failed to delete old plugin file!");
             }
         }
         this.currentVersion = getCurrentVersion();
