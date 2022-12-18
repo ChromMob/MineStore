@@ -43,7 +43,6 @@ public final class MineStore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance = this;
         if (!isEnabled()) {
             return;
         }
