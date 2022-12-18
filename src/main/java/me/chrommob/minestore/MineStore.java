@@ -7,7 +7,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
-import me.chrommob.minestore.authorization.AuthManager;
 import me.chrommob.minestore.commands.*;
 import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.gui.Event;

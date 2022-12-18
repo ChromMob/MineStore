@@ -8,7 +8,7 @@ import org.bukkit.plugin.InvalidPluginException;
 import java.io.File;
 
 public class UpdateLoader implements Runnable {
-    private final File pluginFile = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore", "MineStore.jar");
+    private final File pluginFile = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore" + File.separator + "temp", "MineStore.jar");
 
     public UpdateLoader() {
         this.run();
@@ -22,6 +22,7 @@ public class UpdateLoader implements Runnable {
             Bukkit.getLogger().info("Update loaded successfully.");
             Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("MineStore"));
         } catch (InvalidPluginException | InvalidDescriptionException e) {
+            e.printStackTrace();
             Bukkit.getLogger().warning("Failed to load plugin!");
         }
     }
