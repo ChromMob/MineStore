@@ -19,10 +19,23 @@ public class UpdateLoader implements Runnable {
         Bukkit.getPluginManager().disablePlugin(MineStore.instance);
         try {
             Bukkit.getPluginManager().loadPlugin(pluginFile);
+            if (!isWindows() && replaceFile()) {
+                Bukkit.getLogger().info("File replaced successfully. So it will not be needed to be redownloaded on restart.");
+            } else {
+                Bukkit.getLogger().info("File not replaced. You are on Windows or the file is not found.");
+            }
             Bukkit.getLogger().info("Update loaded successfully.");
             Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("MineStore"));
         } catch (InvalidPluginException | InvalidDescriptionException e) {
             Bukkit.getLogger().warning("Failed to load plugin!");
         }
+    }
+
+    private boolean replaceFile() {
+        return pluginFile.renameTo(new File(MineStore.instance.getDataFolder().getParentFile(), "MineStore.jar"));
+    }
+
+    private boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
     }
 }
