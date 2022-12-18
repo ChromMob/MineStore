@@ -20,12 +20,13 @@ public class UpdateLoader implements Runnable {
     public void run() {
         Bukkit.getPluginManager().disablePlugin(MineStore.instance);
         try {
-            Bukkit.getPluginManager().loadPlugin(pluginFile);
+            if (!isWindows() && copyFile()) {
+                Bukkit.getLogger().info("Copied new plugin file to plugins directory.");
+            } else {
+                Bukkit.getPluginManager().loadPlugin(pluginFile);
+            }
             Bukkit.getLogger().info("Update loaded successfully.");
             Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("MineStore"));
-//            if (!isWindows() && copyFile()) {
-//                Bukkit.getLogger().info("Copied new plugin file to plugins directory.");
-//            }
         } catch (InvalidPluginException | InvalidDescriptionException e) {
             e.printStackTrace();
             Bukkit.getLogger().warning("Failed to load plugin!");

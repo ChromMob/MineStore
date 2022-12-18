@@ -48,12 +48,12 @@ public final class MineStore extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
         loadConfig();
-        new UpdateChecker(getConfig().getBoolean("auto-update"));
     }
 
     @Override
     public void onEnable() {
         instance = this;
+        new UpdateChecker(getConfig().getBoolean("auto-update"));
         if (!isEnabled()) {
             return;
         }
