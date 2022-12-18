@@ -24,41 +24,9 @@ public class UpdateChecker {
             return;
         }
         if (isUpdateAvailable()) {
-            downloadLink = getDownloadLink();
-            if (downloadLink != null) {
-                downloadUpdate();
-            } else {
-                MineStore.instance.getLogger().warning("Failed to get download link.");
-            }
+            downloadLink = "https://nightly.link/ChromMob/MineStore/workflows/maven/main/artifact.zip";
+            downloadUpdate();
         }
-    }
-
-    private String getDownloadLink() {
-        String repository = "ChromMob/MineStore"; // Replace with the repository you want to fetch the commit history for
-        String apiUrl = "https://api.github.com/repos/" + repository + "/actions/artifacts";
-
-        try {
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            Gson gson = new Gson();
-            JsonObject root = gson.fromJson(String.valueOf(response), JsonObject.class);
-            int actionId = root.get("artifacts").getAsJsonArray().get(root.get("artifacts").getAsJsonArray().size() - 1).getAsJsonObject().get("id").getAsInt();
-            return "https://nightly.link/" + repository + "/actions/runs/" + actionId;
-        } catch (IOException e) {
-            // Handle error
-        }
-        return null;
     }
 
     private boolean isUpdateAvailable() {
@@ -70,11 +38,9 @@ public class UpdateChecker {
             URL downloadUrl = new URL(downloadLink);
             HttpURLConnection connection = (HttpURLConnection) downloadUrl.openConnection();
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
-            connection.setRequestProperty("Authorization", "token $SOME_TOKEN_WITHOUT_PERMISSIONS");
             InputStream inputStream = new BufferedInputStream(connection.getInputStream());
-            Path path = Paths.get("plugins/MineStore.zip");
-            FileOutputStream outputStream = new FileOutputStream(path.toFile());
+            File file = new File(MineStore.instance.getDataFolder().getParentFile() + File.separator + "MineStore", "MineStore.zip");
+            FileOutputStream outputStream = new FileOutputStream(file);
 
             byte[] buffer = new byte[4096];
             int bytesRead;
