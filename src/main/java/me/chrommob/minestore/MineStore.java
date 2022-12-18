@@ -47,13 +47,13 @@ public final class MineStore extends JavaPlugin {
             getLogger().info("Disabling plugin so you can configure it!");
             Bukkit.getPluginManager().disablePlugin(this);
         }
+        loadConfig();
+        new UpdateChecker(getConfig().getBoolean("auto-update"));
     }
 
     @Override
     public void onEnable() {
         instance = this;
-        loadConfig();
-        new UpdateChecker(getConfig().getBoolean("auto-update"));
         if (!isEnabled()) {
             return;
         }
