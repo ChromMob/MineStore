@@ -8,6 +8,7 @@ import me.chrommob.minestore.MineStore;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -56,6 +57,11 @@ public class UpdateChecker {
             if (downloadUpdate()) {
                 MineStore.instance.getLogger().info("Update downloaded successfully.");
                 if (unzipFile()) {
+                    if (!isWindows() && copyFile()) {
+                        MineStore.instance.getLogger().info("File replaced successfully. So it will not be needed to be redownloaded on restart.");
+                    } else {
+                        MineStore.instance.getLogger().info("File not replaced. You are on Windows or the file is not found.");
+                    }
                     new UpdateLoader();
                 } else {
                     MineStore.instance.getLogger().warning("Failed to load update.");
@@ -67,6 +73,19 @@ public class UpdateChecker {
         } else {
             MineStore.instance.getLogger().info("No update available.");
         }
+    }
+
+    private boolean copyFile() {
+        try {
+            Files.copy(pluginFile.toPath(), new File(MineStore.instance.getDataFolder().getParentFile(), "MineStore.jar").toPath());
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    private boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
     }
 
     private boolean unzipFile() {
