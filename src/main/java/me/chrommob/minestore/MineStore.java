@@ -44,7 +44,7 @@ public final class MineStore extends JavaPlugin {
             saveDefaultConfig();
             loadConfig();
             getLogger().info("Config.yml created!");
-            getConfig().set("version", getDescription().getVersion());
+            getConfig().set("ms-version", getDescription().getVersion());
             saveConfig();
             getLogger().info("Disabling plugin so you can configure it!");
             getServer().getPluginManager().disablePlugin(this);
@@ -53,16 +53,18 @@ public final class MineStore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (getConfig().getString("version") == null) {
+        loadConfig();
+        getLogger().info(getConfig().getString("ms-version"));
+        if (getConfig().getString("ms-version").equals("1.3")) {
             new File(getDataFolder(), "config.yml").renameTo(new File(getDataFolder(), "config_old.yml"));
             saveDefaultConfig();
             loadConfig();
-            getConfig().set("version", getDescription().getVersion());
+            getConfig().set("ms-version", getDescription().getVersion());
             saveConfig();
         }
-        if (!getConfig().getString("version").equals(getDescription().getVersion())) {
+        if (!getConfig().getString("ms-version").equals(getDescription().getVersion())) {
             loadConfig();
-            getConfig().set("version", getDescription().getVersion());
+            getConfig().set("ms-version", getDescription().getVersion());
             saveConfig();
         }
         instance = this;
