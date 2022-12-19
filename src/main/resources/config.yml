@@ -79,12 +79,13 @@ mysql:
 #------------------------------------------------#
 # Auth settings                                  #
 auth:
-  # The colour will always be red.               #
-  message: "If you are trying to verify yourself click the message if not contact the admins immediately!"
+  # You can change colors here.                  #
+  message: "&2You are trying to log in to our &6&lstore.
+            &6&lCLICK HERE &2to confirm authorization!"
   # Auth timeout in minutes                      #
   time: 5
   # Successful message                           #
-  successful: "You have been successfully verified."
+  successful: "&6You have been successfully verified."
   # Failed message                               #
-  failed: "Your time run out or you run the command manually."
+  failed: "&cYour time run out or you run the command manually."
 #------------------------------------------------#
