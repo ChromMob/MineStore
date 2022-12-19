@@ -40,14 +40,12 @@ public class Event implements Listener {
             for (int i = 0; i < GuiData.getData().size(); i++) {
                 for (int j = 0; j < GuiData.getData().get(i).getPackages().size(); j++) {
                     if (GuiData.getData().get(i).getPackages().get(j).getCategory_url().equalsIgnoreCase(item)) {
-                        plugin.getLogger().info("Opening packageGUI for " + GuiData.getData().get(i).getPackages().get(j).getName());
                         Player player = (Player) event.getWhoClicked();
                         packageGUI gui = new packageGUI(plugin, item);
                         gui.openGUI(player);
                         return;
                     }
                     if (GuiData.getData().get(i).getPackages().get(j).getName().equalsIgnoreCase(item) && (GuiData.getSubcategory().containsValue(item) || GuiData.getSubcategory().containsKey(item)) || GuiData.getData().get(i).getName().equalsIgnoreCase(item)) {
-                        plugin.getLogger().info("Opening packageGUI for " + GuiData.getData().get(i).getPackages().get(j).getName());
                         Player player = (Player) event.getWhoClicked();
                         packageGUI gui = new packageGUI(plugin, item);
                         gui.openGUI(player);
