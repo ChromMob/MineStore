@@ -7,6 +7,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
+import lombok.NonNull;
 import me.chrommob.minestore.authorization.AuthManager;
 import me.chrommob.minestore.commands.*;
 import me.chrommob.minestore.data.Config;
@@ -20,6 +21,7 @@ import me.chrommob.minestore.util.Mode;
 import me.chrommob.minestore.util.Runnable;
 import me.chrommob.minestore.updater.UpdateChecker;
 import me.chrommob.minestore.websocket.Socket;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -34,6 +36,15 @@ public final class MineStore extends JavaPlugin {
     UserManager userManager;
     public static MineStore instance;
     Mode mode = Mode.WEBSOCKET;
+
+    private BukkitAudiences adventure;
+
+    public @NonNull BukkitAudiences adventure() {
+        if(this.adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+        return this.adventure;
+    }
 
     @Override
     public void onLoad() {
@@ -75,6 +86,7 @@ public final class MineStore extends JavaPlugin {
         if (!isEnabled()) {
             return;
         }
+        adventure = BukkitAudiences.create(this);
         Metrics metrics = new Metrics(this, 14043);
         metrics.addCustomChart(new SimplePie("mode", () -> mode.toString()));
         metrics.addCustomChart(new SimplePie("mysql", () -> MySQLData.isEnabled() ? "true" : "false"));
@@ -125,7 +137,10 @@ public final class MineStore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        if(this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
+        }
     }
 
     private void dependencyCheck() {

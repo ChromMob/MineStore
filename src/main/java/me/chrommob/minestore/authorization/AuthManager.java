@@ -2,12 +2,12 @@ package me.chrommob.minestore.authorization;
 
 import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.data.Config;
-import net.kyori.text.TextComponent;
-import net.kyori.text.adapter.bukkit.TextAdapter;
-import net.kyori.text.event.ClickEvent;
-import net.kyori.text.format.TextColor;
-import net.kyori.text.format.TextDecoration;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -44,32 +44,21 @@ public class AuthManager {
         }
         Player player = Bukkit.getPlayer(username);
         if (player == null) return;
-        TextComponent textComponent = TextComponent.builder()
-                .content(Config.getAuthMessage())
-                .color(TextColor.RED)
-                .clickEvent(ClickEvent.runCommand("/minestore verify"))
-                .build();
-        TextAdapter.sendMessage(player, textComponent);
+        Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(Config.getAuthMessage()).clickEvent(ClickEvent.runCommand("/minestore verify"));
+        MineStore.instance.adventure().player(player).sendMessage(component);
     }
 
     public static void onCommand(String username){
         Player player = Bukkit.getPlayer(username);
         if (player == null) return;
         if (!userHashMap.containsKey(username)) {
-            TextComponent failed = TextComponent.builder()
-                    .content(Config.getAuthFailed())
-                    .color(TextColor.RED)
-                    .build();
-            TextAdapter.sendMessage(player, failed);
+            Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(Config.getAuthFailed());
+            MineStore.instance.adventure().player(player).sendMessage(component);
             return;
         }
         post(player.getName(), "confirm");
-        TextComponent textComponent = TextComponent.builder()
-                .content(Config.getAuthSuccessful())
-                .color(TextColor.GREEN)
-                .decoration(TextDecoration.BOLD, true)
-                .build();
-        TextAdapter.sendMessage(player, textComponent);
+        Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(Config.getAuthSuccessful());
+        MineStore.instance.adventure().player(player).sendMessage(component);
     }
     private static void post(String name, String state) {
         AuthUser user = userHashMap.get(name);
