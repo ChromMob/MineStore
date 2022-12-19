@@ -64,7 +64,6 @@ public final class MineStore extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
         if (!getConfig().getString("ms-version").equals(getDescription().getVersion())) {
-            loadConfig();
             getConfig().set("ms-version", getDescription().getVersion());
             saveConfig();
         }
