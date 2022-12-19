@@ -68,6 +68,9 @@ public final class MineStore extends JavaPlugin {
             getConfig().set("ms-version", getDescription().getVersion());
             saveConfig();
         }
+        if (!isEnabled()) {
+            return;
+        }
         instance = this;
         new UpdateChecker(getConfig().getBoolean("auto-update"));
         if (!isEnabled()) {
