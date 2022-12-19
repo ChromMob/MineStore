@@ -80,8 +80,7 @@ mysql:
 # Auth settings                                  #
 auth:
   # You can change colors here.                  #
-  message: "&2You are trying to log in to our &6&lstore.
-            &6&lCLICK HERE &2to confirm authorization!"
+  message: "&2You are trying to log in to our &6&lstore. &6&lCLICK HERE &2to confirm authorization! If you are not able to click run /minestore verify"
   # Auth timeout in minutes                      #
   time: 5
   # Successful message                           #
