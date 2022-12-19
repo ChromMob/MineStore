@@ -54,13 +54,14 @@ public final class MineStore extends JavaPlugin {
     @Override
     public void onEnable() {
         loadConfig();
-        getLogger().info(getConfig().getString("ms-version"));
-        if (getConfig().getString("ms-version").equals("1.3")) {
+        if (getConfig().getString("ms-version") == null) {
             new File(getDataFolder(), "config.yml").renameTo(new File(getDataFolder(), "config_old.yml"));
             saveDefaultConfig();
             loadConfig();
             getConfig().set("ms-version", getDescription().getVersion());
             saveConfig();
+            getLogger().info("Disabling plugin so you can configure it!");
+            getServer().getPluginManager().disablePlugin(this);
         }
         if (!getConfig().getString("ms-version").equals(getDescription().getVersion())) {
             loadConfig();
