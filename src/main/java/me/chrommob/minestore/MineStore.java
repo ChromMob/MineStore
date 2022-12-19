@@ -49,17 +49,22 @@ public final class MineStore extends JavaPlugin {
             getLogger().info("Disabling plugin so you can configure it!");
             getServer().getPluginManager().disablePlugin(this);
         }
-        if (!getConfig().getString("version").equals(getDescription().getVersion())) {
+    }
+
+    @Override
+    public void onEnable() {
+        if (getConfig().getString("version") == null) {
             new File(getDataFolder(), "config.yml").renameTo(new File(getDataFolder(), "config_old.yml"));
             saveDefaultConfig();
             loadConfig();
             getConfig().set("version", getDescription().getVersion());
             saveConfig();
         }
-    }
-
-    @Override
-    public void onEnable() {
+        if (!getConfig().getString("version").equals(getDescription().getVersion())) {
+            loadConfig();
+            getConfig().set("version", getDescription().getVersion());
+            saveConfig();
+        }
         instance = this;
         new UpdateChecker(getConfig().getBoolean("auto-update"));
         if (!isEnabled()) {
