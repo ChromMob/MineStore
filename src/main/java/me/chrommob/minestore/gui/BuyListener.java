@@ -20,11 +20,11 @@ public class BuyListener {
     @SneakyThrows
     public static void run() {
         String link;
-        if (Config.getSecretKey().get(0).equalsIgnoreCase("")
-                || Config.getSecretKey().get(0).equalsIgnoreCase("hard_api_key_here")) {
+        if (Config.getApiKey().get(0).equalsIgnoreCase("")
+                || Config.getApiKey().get(0).equalsIgnoreCase("hard_api_key_here")) {
             link = Config.getApiUrl().get(0) +  "gui/packages_new";
         } else {
-            link = Config.getApiUrl().get(0) + Config.getSecretKey().get(0) + "/gui/packages_new";
+            link = Config.getApiUrl().get(0) + Config.getApiKey().get(0) + "/gui/packages_new";
         }
         URL url = new URL(link);
         try {
