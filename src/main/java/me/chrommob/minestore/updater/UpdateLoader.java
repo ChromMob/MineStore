@@ -35,6 +35,9 @@ public class UpdateLoader implements Runnable {
 
     private boolean copyFile() {
         try {
+            if (pluginFile.exists()) {
+                Files.delete(pluginFile.toPath());
+            }
             Files.copy(pluginFile.toPath(), new File(MineStore.instance.getDataFolder().getParentFile(), "MineStore.jar").toPath());
             return true;
         } catch (IOException e) {
