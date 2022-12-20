@@ -218,7 +218,7 @@ public final class MineStore extends JavaPlugin {
         Config.setItemPrice(getConfig().getString("format.item-price"));
         Config.setAuthMessage(getConfig().getString("auth.message"));
         Config.setAuthDelay(getConfig().getDouble("auth.time"));
-        Config.setAuthSuccessful("auth.successful");
-        Config.setAuthFailed("auth.failed");
+        Config.setAuthSuccessful(getConfig().getString("auth.successful"));
+        Config.setAuthFailed(getConfig().getString("auth.failed"));
     }
 }
