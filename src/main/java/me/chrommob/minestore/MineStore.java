@@ -90,6 +90,7 @@ public final class MineStore extends JavaPlugin {
         Metrics metrics = new Metrics(this, 14043);
         metrics.addCustomChart(new SimplePie("mode", () -> mode.toString()));
         metrics.addCustomChart(new SimplePie("mysql", () -> MySQLData.isEnabled() ? "true" : "false"));
+        metrics.addCustomChart(new SimplePie("auto-update_feature", () -> getConfig().getBoolean("auto-update") ? "true" : "false"));
         new AuthManager();
         dependencyCheck();
         PluginManager plManager = Bukkit.getPluginManager();
