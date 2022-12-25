@@ -3,11 +3,9 @@ package me.chrommob.minestore.authorization;
 import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.data.Config;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -34,8 +32,10 @@ public class AuthManager {
 
     private static final ConcurrentHashMap<String, AuthUser> userHashMap = new ConcurrentHashMap<>();
     public static void auth(String auth_id, String username, int id, int index) {
+        if (!userHashMap.containsKey(username)) {
+            sendAuthMessage(username);
+        }
         userHashMap.put(username, new AuthUser(username, auth_id, id, index));
-        sendAuthMessage(username);
     }
 
     public static void sendAuthMessage(String username) {
