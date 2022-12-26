@@ -38,7 +38,6 @@ public class PlaceholderHook extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player p, String params) {
-        Bukkit.getLogger().info("PlaceholderAPI: " + params);
         if(params.contains("top_donator_username_")) {
             int arg = Integer.parseInt(params.replaceFirst("top_donator_username_", ""));
             try {
