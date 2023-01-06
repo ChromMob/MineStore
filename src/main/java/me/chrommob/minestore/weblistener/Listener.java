@@ -1,7 +1,6 @@
 package me.chrommob.minestore.weblistener;
 
 import com.google.gson.Gson;
-import lombok.SneakyThrows;
 import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.authorization.AuthManager;
 import me.chrommob.minestore.commandexecution.Command;
@@ -14,6 +13,7 @@ import javax.net.ssl.SSLHandshakeException;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.SocketException;
 import java.net.URL;
 
@@ -40,6 +40,18 @@ public class Listener {
             while ((line = reader.readLine()) != null) {
                 Gson gson = new Gson();
                 data = gson.fromJson(line, WebListenerObjects.class);
+            }
+            if (Config.isDebug()) {
+                StringBuilder sb = new StringBuilder();
+                for (Method method : data.getClass().getMethods()) {
+                    if (method.getName().startsWith("get") && !method.getName().equals("getClass")) {
+                        try {
+                            sb.append(method.getName().substring(3)).append(": ").append(method.invoke(data).toString()).append(" ");
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+                MineStore.instance.getLogger().info("Listener.java " + sb);
             }
             if (data.getType() != null){
                 AuthManager.auth(data.getAuth_id(), data.getUsername(), data.getId(), index);

@@ -1,6 +1,7 @@
 package me.chrommob.minestore.placeholders;
 
 import me.chrommob.minestore.MineStore;
+import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.data.GuiData;
 import me.chrommob.minestore.data.PlaceHolderData;
 import me.chrommob.minestore.gui.Currency;
@@ -38,6 +39,9 @@ public class PlaceholderHook extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player p, String params) {
+        if (Config.isDebug()) {
+            MineStore.instance.getLogger().info("PlaceholderHook.java onPlaceholderRequest " + p.getDisplayName() + " " + params);
+        }
         if(params.contains("top_donator_username_")) {
             int arg = Integer.parseInt(params.replaceFirst("top_donator_username_", ""));
             try {

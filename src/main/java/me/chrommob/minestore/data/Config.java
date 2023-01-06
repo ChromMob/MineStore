@@ -86,4 +86,13 @@ public class Config {
     @Setter
     @Getter
     private static String authFailed;
+    private static boolean debug = false;
+
+    public static boolean isDebug() {
+        return debug;
+    }
+
+    public static void setDebug(boolean debug) {
+        Config.debug = debug;
+    }
 }

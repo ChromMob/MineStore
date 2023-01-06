@@ -34,7 +34,13 @@ public class JoinQuitListener implements Listener {
             }
         } catch (Exception ignored) {
         }
+        if (Config.isDebug()) {
+            MineStore.instance.getLogger().info("JoinQuitListener.java onPlayerJoin " + Config.isVaultPresent() + " " + MySQLData.isEnabled());
+        }
         if (Config.isVaultPresent() && MySQLData.isEnabled()) {
+            if (Config.isDebug()) {
+                MineStore.instance.getLogger().info("JoinQuitListener.java onPlayerJoin creating profile " + event.getPlayer().getName());
+            }
             String name = event.getPlayer().getName();
             UUID uuid = event.getPlayer().getUniqueId();
             MineStore.instance.getUserManager().createProfile(uuid, name);

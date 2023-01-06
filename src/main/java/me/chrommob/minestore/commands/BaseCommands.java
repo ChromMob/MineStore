@@ -5,6 +5,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
 import me.chrommob.minestore.MineStore;
+import me.chrommob.minestore.data.Config;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.command.CommandSender;
@@ -62,5 +63,12 @@ public class BaseCommands extends BaseCommand {
         } else {
             sender.sendMessage("§cChat: null");
         }
+    }
+
+    @Subcommand("debug")
+    @CommandPermission("ms.debug")
+    private void onDebug(CommandSender sender) {
+        Config.setDebug(!Config.isDebug());
+        sender.sendMessage("Debug mode: " + Config.isDebug());
     }
 }

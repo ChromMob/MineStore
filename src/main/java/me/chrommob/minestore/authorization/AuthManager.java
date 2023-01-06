@@ -32,6 +32,8 @@ public class AuthManager {
 
     private static final ConcurrentHashMap<String, AuthUser> userHashMap = new ConcurrentHashMap<>();
     public static void auth(String auth_id, String username, int id, int index) {
+        if (Config.isDebug())
+            MineStore.instance.getLogger().info("AuthManager.java received: auth_id: " + auth_id + " username: " + username + " id: " + id + " index: " + index);
         if (!userHashMap.containsKey(username)) {
             sendAuthMessage(username);
         }
@@ -39,6 +41,8 @@ public class AuthManager {
     }
 
     public static void sendAuthMessage(String username) {
+        if (Config.isDebug())
+            MineStore.instance.getLogger().info("AuthManager.java sendAuthMessage: " + username);
         if (!userHashMap.containsKey(username)) {
             return;
         }
@@ -49,6 +53,8 @@ public class AuthManager {
     }
 
     public static void onCommand(String username){
+        if (Config.isDebug())
+            MineStore.instance.getLogger().info("AuthManager.java onCommand: " + username);
         Player player = Bukkit.getPlayer(username);
         if (player == null) return;
         if (!userHashMap.containsKey(username)) {
@@ -61,6 +67,8 @@ public class AuthManager {
         MineStore.instance.adventure().player(player).sendMessage(component);
     }
     private static void post(String name, String state) {
+        if (Config.isDebug())
+            MineStore.instance.getLogger().info("AuthManager.java post: " + name + " " + state);
         AuthUser user = userHashMap.get(name);
         try {
             HttpsURLConnection urlConnection;

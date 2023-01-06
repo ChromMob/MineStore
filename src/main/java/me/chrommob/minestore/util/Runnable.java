@@ -20,9 +20,11 @@ import java.util.concurrent.TimeUnit;
 
 //Runnable to execute plugin functions
 public class Runnable {
-    private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     public static void runListener(String load) {
-        executor.scheduleAtFixedRate(() -> {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(MineStore.instance, () -> {
+            if (Config.isDebug()) {
+                MineStore.instance.getLogger().info("Runnable.java runListener " + load);
+            }
             if (load.equalsIgnoreCase("web")) {
                 for (int i = 0; i < Config.getApiUrl().size(); i++) {
                     if (Config.getEmpty().get(i)) {
@@ -43,8 +45,8 @@ public class Runnable {
                 MineStore.instance.getUserManager().updateAll();
                 ConnectionPool.updateTable();
             }
-        } , 0, 30, TimeUnit.SECONDS);
-        executor.scheduleAtFixedRate(() -> {
+        }, 0, 30 * 20);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(MineStore.instance, () -> {
             if (load.equalsIgnoreCase("web")) {
                 for (int i = 0; i < Config.getApiUrl().size(); i++) {
                     if (!Config.getEmpty().get(i)) {
@@ -52,6 +54,6 @@ public class Runnable {
                     }
                 }
             }
-        } , 0, 1, TimeUnit.SECONDS);
+        }, 0, 2*20);
     }
 }

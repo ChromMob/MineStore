@@ -1,6 +1,8 @@
 package me.chrommob.minestore.listeners;
 
+import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.commands.PunishmentManager;
+import me.chrommob.minestore.data.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,9 +20,11 @@ public class JoinQuitListener implements Listener {
                 runLater.remove(name);
             } else {
                 Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("MineStore"), () -> {
+                    if (Config.isDebug()) {
+                        MineStore.instance.getLogger().info("JoinQuitListener.java onPlayerJoin " + name);
+                    }
                     runLater.get(name).forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
                     runLater.remove(name);
-                    System.out.print(runLater);
                     PunishmentManager.update();
                 });
             }

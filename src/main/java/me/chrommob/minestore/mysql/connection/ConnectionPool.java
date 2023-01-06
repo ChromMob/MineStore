@@ -3,6 +3,7 @@ package me.chrommob.minestore.mysql.connection;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import me.chrommob.minestore.MineStore;
+import me.chrommob.minestore.data.Config;
 import me.chrommob.minestore.mysql.MySQLData;
 import me.chrommob.minestore.mysql.data.User;
 import org.bukkit.Bukkit;
@@ -171,6 +172,9 @@ public class ConnectionPool {
             ps.setString(9, suffix);
             ps.setDouble(10, user.getBalance());
             ps.setString(11, group);
+            if (Config.isDebug()) {
+                MineStore.instance.getLogger().info("ConnectionPool.java: Updating user: " + uuid + " " + username + " " + prefix + " " + suffix + " " + user.getBalance() + " " + group);
+            }
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
