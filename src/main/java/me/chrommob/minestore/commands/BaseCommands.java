@@ -8,6 +8,7 @@ import me.chrommob.minestore.MineStore;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @CommandAlias("MineStore|ms")
 public class BaseCommands extends BaseCommand {
@@ -40,6 +41,7 @@ public class BaseCommands extends BaseCommand {
         }
         if (economy != null) {
             sender.sendMessage("§aEconomy: " + economy.getName());
+            sender.sendMessage("Your balance: " + economy.getBalance(sender.getName()));
         } else {
             sender.sendMessage("§cEconomy: null");
         }
@@ -51,6 +53,10 @@ public class BaseCommands extends BaseCommand {
         }
         if (chat != null) {
             sender.sendMessage("§aChat: " + chat.getName());
+            if (sender instanceof Player) {
+                sender.sendMessage("Your prefix: " + chat.getPlayerPrefix((Player) sender));
+                sender.sendMessage("Your suffix: " + chat.getPlayerSuffix((Player) sender));
+            }
         } else {
             sender.sendMessage("§cChat: null");
         }
