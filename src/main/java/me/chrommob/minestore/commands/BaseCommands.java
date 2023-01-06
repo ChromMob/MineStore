@@ -41,7 +41,9 @@ public class BaseCommands extends BaseCommand {
         }
         if (economy != null) {
             sender.sendMessage("§aEconomy: " + economy.getName());
-            sender.sendMessage("Your balance: " + economy.getBalance(sender.getName()));
+            if (sender instanceof Player) {
+                sender.sendMessage("Your balance: " + economy.getBalance((Player) sender));
+            }
         } else {
             sender.sendMessage("§cEconomy: null");
         }
