@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import me.chrommob.minestore.MineStore;
 import me.chrommob.minestore.mysql.MySQLData;
 import me.chrommob.minestore.mysql.data.User;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.Connection;
@@ -71,6 +72,8 @@ public class ConnectionPool {
 
         // config.setConnectionTestQuery(testQuery);
         hikari = new HikariDataSource(config);
+
+        MineStore.instance.getLogger().info(hikari.isRunning() ? "Database connection established." : "Database connection failed.");
     }
 
     public static void close(Connection conn, PreparedStatement ps, ResultSet res) {
@@ -135,8 +138,8 @@ public class ConnectionPool {
         PreparedStatement ps = null;
         try {
             conn = hikari.getConnection();
-            String sql_qury = "INSERT INTO playerdata (uuid,username,prefix,suffix,balance,player_group) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE username=?,prefix=?,suffix=?,balance=?,player_group=?";
-            ps = conn.prepareStatement(sql_qury);
+            String sql_query = "INSERT INTO playerdata (uuid,username,prefix,suffix,balance,player_group) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE username=?,prefix=?,suffix=?,balance=?,player_group=?";
+            ps = conn.prepareStatement(sql_query);
             String uuid = user.getUuid().toString();
             String username = user.getName();
             String prefix;

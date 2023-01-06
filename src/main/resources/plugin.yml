@@ -2,4 +2,4 @@ name: MineStore
 version: '${project.version}'
 main: me.chrommob.minestore.MineStore
 
-softdepend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI, Vault]
