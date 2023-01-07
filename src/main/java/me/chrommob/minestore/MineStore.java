@@ -107,6 +107,7 @@ public final class MineStore extends JavaPlugin {
         } else {
             mode = Mode.WEBLISTENER;
         }
+        getLogger().info("MySQL: " + getConfig().getBoolean("mysql.enabled"));
         MySQLData.setEnabled(getConfig().getBoolean("mysql.enabled"));
         Config.setStoreEnabled(getConfig().getBoolean("store-enabled"));
         Config.setPort(getConfig().getInt("port"));
