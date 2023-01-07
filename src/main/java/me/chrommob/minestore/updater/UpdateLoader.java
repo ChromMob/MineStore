@@ -23,8 +23,10 @@ public class UpdateLoader implements Runnable {
         try {
             if (!isWindows()) {
                 copyFile();
+                Bukkit.getPluginManager().loadPlugin(oldPluginFile);
+            } else {
+                Bukkit.getPluginManager().loadPlugin(newPluginFile);
             }
-            Bukkit.getPluginManager().loadPlugin(newPluginFile);
             Bukkit.getLogger().info("Update loaded successfully.");
             Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("MineStore"));
         } catch (InvalidPluginException | InvalidDescriptionException e) {
