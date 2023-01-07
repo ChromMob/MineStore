@@ -24,7 +24,7 @@ public class UpdateChecker {
     public UpdateChecker(boolean isAutoUpdate) {
         if (!temp.exists()) {
             if (temp.mkdirs()) {
-                MineStore.instance.getLogger().info("Created temp directory.");
+                MineStore.instance.getLogger().info("Created temp folder: " + temp.getAbsolutePath());
             }
         }
         if (zipFile.exists()) {
