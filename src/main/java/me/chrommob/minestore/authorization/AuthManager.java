@@ -41,11 +41,11 @@ public class AuthManager {
     }
 
     public static void sendAuthMessage(String username) {
-        if (Config.isDebug())
-            MineStore.instance.getLogger().info("AuthManager.java sendAuthMessage: " + username);
         if (!userHashMap.containsKey(username)) {
             return;
         }
+        if (Config.isDebug())
+            MineStore.instance.getLogger().info("AuthManager.java sendAuthMessage: " + username);
         Player player = Bukkit.getPlayer(username);
         if (player == null) return;
         Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(Config.getAuthMessage()).clickEvent(ClickEvent.runCommand("/minestore verify"));
