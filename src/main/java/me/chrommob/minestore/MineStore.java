@@ -53,7 +53,7 @@ public final class MineStore extends JavaPlugin {
         } else {
             getLogger().info("Config.yml not found, creating!");
             saveDefaultConfig();
-            loadConfig();
+            reloadConfig();
             getLogger().info("Config.yml created!");
             getConfig().set("ms-version", getDescription().getVersion());
             saveConfig();
@@ -64,11 +64,11 @@ public final class MineStore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        loadConfig();
+        reloadConfig();
         if (getConfig().getString("ms-version") == null) {
             new File(getDataFolder(), "config.yml").renameTo(new File(getDataFolder(), "config_old.yml"));
             saveDefaultConfig();
-            loadConfig();
+            reloadConfig();
             getConfig().set("ms-version", getDescription().getVersion());
             saveConfig();
             getLogger().info("Disabling plugin so you can configure it!");
