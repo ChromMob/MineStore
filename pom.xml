@@ -44,6 +44,11 @@
                             <!-- Replace this with your package! -->
                             <shadedPattern>me.chrommob.minestore.util.kiori</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <!-- Replace this with your package! -->
+                            <shadedPattern>me.chrommob.minestore.util.hikari</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
